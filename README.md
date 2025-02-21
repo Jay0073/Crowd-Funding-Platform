@@ -1,70 +1,67 @@
-# Getting Started with Create React App
+# Crowd-Funding Platform
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## Overview
+The **Crowd-Funding Platform** is a web-based application that enables users to create and support fundraising campaigns. The platform provides a secure and transparent way for individuals and organizations to raise funds for various causes and projects.
 
-## Available Scripts
+## Features
+- User authentication and profile management
+- Create, edit, and delete fundraising campaigns
+- Secure payment gateway integration
+- Track donations and campaign progress
+- Admin panel for campaign moderation
+- Responsive and intuitive UI/UX
 
-In the project directory, you can run:
+## Tech Stack
+- **Frontend:** React.js, Redux, Tailwind CSS
+- **Backend:** Node.js, Express.js
+- **Database:** MongoDB
+- **Authentication:** JWT (JSON Web Token)
+- **Payment Integration:** Stripe/PayPal
 
-### `npm start`
+## Installation
+### Prerequisites
+- Node.js (>= 14.x)
+- MongoDB (Local or Cloud-based)
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+### Setup
+1. **Clone the Repository:**
+   ```sh
+   git clone https://github.com/Jay0073/Crowd-Funding-Platform.git
+   cd Crowd-Funding-Platform
+   ```
+2. **Install Dependencies:**
+   ```sh
+   npm install
+   ```
+3. **Set up Environment Variables:**
+   Create a `.env` file in the root directory and add the following:
+   ```env
+   MONGO_URI=your_mongodb_connection_string
+   JWT_SECRET=your_secret_key
+   STRIPE_SECRET=your_stripe_api_key
+   ```
+4. **Run the Server:**
+   ```sh
+   npm start
+   ```
+5. **Start the Frontend (if applicable):**
+   ```sh
+   cd client
+   npm start
+   ```
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+## Usage
+1. Sign up or log in to create a campaign.
+2. Set up fundraising goals, descriptions, and images.
+3. Share the campaign link to attract donors.
+4. Users can donate via the integrated payment system.
+5. Track progress and update supporters.
 
-### `npm test`
+## Contributing
+Contributions are welcome! To contribute:
+1. Fork the repository.
+2. Create a new branch: `git checkout -b feature-branch`
+3. Make changes and commit: `git commit -m 'Add new feature'`
+4. Push to the branch: `git push origin feature-branch`
+5. Open a pull request.
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
-
-### `npm run build`
-
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
