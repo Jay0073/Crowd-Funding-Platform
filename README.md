@@ -12,11 +12,10 @@ The **Crowd-Funding Platform** is a web-based application that enables users to 
 - Responsive and intuitive UI/UX
 
 ## Tech Stack
-- **Frontend:** React.js, Redux, Tailwind CSS
+- **Frontend:** React.js, Redux, Bootstrap
 - **Backend:** Node.js, Express.js
 - **Database:** MongoDB
 - **Authentication:** JWT (JSON Web Token)
-- **Payment Integration:** Stripe/PayPal
 
 ## Installation
 ### Prerequisites
