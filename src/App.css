@@ -2,6 +2,7 @@
 
 html {
     scroll-behavior: smooth;
+    background-color: oklch(0.987 0.026 102.212);
   }
   
   @layer utilities {

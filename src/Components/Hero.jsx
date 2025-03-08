@@ -1,109 +1,119 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
-import hero_img from '../assets/hero_img.png';
+import { ArrowRight, Users, TrendingUp, Globe, } from 'lucide-react';
+import children from '../assets/children.webp';
+
+const StatCard = ({ icon: Icon, value, label }) => (
+  <div className="flex items-center space-x-3 bg-white/80 backdrop-blur-sm px-4 py-3 rounded-2xl">
+    <div className="h-12 w-12 rounded-xl bg-blue-100 flex items-center justify-center">
+      <Icon size={24} className="text-blue-600" />
+    </div>
+    <div>
+      <div className="text-2xl font-bold text-gray-900">{value}</div>
+      <div className="text-sm text-gray-600">{label}</div>
+    </div>
+  </div>
+);
 
 const Hero = () => {
   return (
-    <div className="relative min-h-screen flex items-center justify-center overflow-hidden">
-      {/* Background Image */}
-      <img src={hero_img} alt="Hero Background" className="absolute inset-0 w-full h-full object-cover z-0" />
+    <div className="relative min-h-screen pt-5 overflow-hidden bg-gradient-to-b from-yellow-300 to-yellow-100 ">
+      {/* Background Elements */}
+      <div className="absolute inset-0 overflow-hidden">
+        <div className="absolute -right-1/4 -top-1/4 w-1/2 h-1/2 rounded-full bg-blue-100/50 blur-3xl" />
+        <div className="absolute -left-1/4 -bottom-1/4 w-1/2 h-1/2 rounded-full bg-blue-100/50 blur-3xl" />
+      </div>
 
-      {/* Gradient Overlay */}
-      <div className="absolute inset-0 bg-gradient-to-r from-yellow-400/90 to-red-400/90 z-10" />
+      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="pt-20 pb-24">
+          {/* Main Content */}
+          <div className="grid lg:grid-cols-2 gap-12 items-center">
+            {/* Left Column - Text Content */}
+            <div className="space-y-8">
+              
 
-      {/* Content Container */}
-      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 z-20">
-        <div className="text-center space-y-8 animate-contentFade">
-          {/* Main Heading */}
-          <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white leading-tight">
-            <span className="block">Make a Difference</span>
-            <span className="block mt-2 text-yellow-200">One Donation at a Time</span>
-          </h1>
+              {/* Headline */}
+              <h1 className="text-5xl lg:text-6xl font-bold leading-tight">
+                <span className="text-gray-900">Make a difference with</span>
+                <span className="block mt-2 text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-blue-800">
+                  crowdfunding that works
+                </span>
+              </h1>
 
-          {/* Inspiring Quote */}
-          <p className="max-w-2xl mx-auto text-lg md:text-xl text-gray-200 leading-relaxed">
-            "The greatest use of life is to spend it for something that will outlast it. 
-            Join us in creating lasting impact through community-driven fundraising."
-          </p>
+              {/* Subheadline */}
+              <p className="text-xl text-gray-600 leading-relaxed">
+                Launch your campaign today and turn your cause into a movement. 
+                Join thousands making real impact through collective giving.
+              </p>
 
-          {/* Stats Section */}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-3xl mx-auto mt-12">
-            {[
-              { value: '10K+', label: 'Donors' },
-              { value: '$2M+', label: 'Raised' },
-              { value: '500+', label: 'Campaigns' },
-              { value: '50+', label: 'Communities' },
-            ].map((stat, index) => (
-              <div 
-                key={index}
-                className="p-4 rounded-xl bg-white/10 backdrop-blur-sm transform hover:scale-105 transition-transform duration-300"
-              >
-                <div className="text-2xl md:text-3xl font-bold text-white">{stat.value}</div>
-                <div className="text-yellow-200 text-sm">{stat.label}</div>
+              {/* CTA Buttons */}
+              <div className="flex flex-wrap gap-4">
+                <button className="px-8 py-4 rounded-full bg-blue-600 text-white font-semibold text-lg transition-all duration-200 transform hover:scale-105 hover:bg-blue-700 active:scale-100 flex items-center gap-2">
+                  Start Fundraising
+                  <ArrowRight size={20} />
+                </button>
+                <button className="px-8 py-4 rounded-full border-2 border-gray-300 text-gray-700 font-semibold text-lg transition-all duration-200 hover:border-blue-600 hover:text-blue-600">
+                  Learn More
+                </button>
               </div>
-            ))}
+            </div>
+
+            {/* Right Column - Image & Stats */}
+            <div className="relative">
+              {/* Main Image */}
+              <div className="relative rounded-2xl overflow-hidden shadow-2xl transform hover:scale-[1.02] transition-transform duration-300">
+                <img 
+                  src={children} 
+                  alt="Crowdfunding Success" 
+                  className="w-full h-full object-cover"
+                />
+                {/* Overlay gradient */}
+                <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent" />
+              </div>
+
+              {/* Floating Stats Cards */}
+              <div className="absolute -left-12 top-1/4 transform -translate-y-1/2">
+                <StatCard 
+                  icon={Users} 
+                  value="50K+" 
+                  label="Active Users" 
+                />
+              </div>
+              <div className="absolute -right-8 top-2/3">
+                <StatCard 
+                  icon={TrendingUp} 
+                  value="$10M+" 
+                  label="Funds Raised" 
+                />
+              </div>
+              <div className="absolute left-1/4 -bottom-8">
+                <StatCard 
+                  icon={Globe} 
+                  value="150+" 
+                  label="Countries" 
+                />
+              </div>
+            </div>
           </div>
 
-          {/* CTA Buttons */}
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mt-12">
-            <Link
-              to="/donate"
-              className="group relative inline-flex items-center justify-center px-8 py-3 font-bold text-white rounded-full 
-                        overflow-hidden bg-gradient-to-r from-yellow-400 to-red-400 hover:from-yellow-500 hover:to-red-500
-                        transform transition-all duration-300 hover:scale-105 hover:shadow-lg
-                        focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:ring-offset-2"
-            >
-              <span className="absolute inset-0 w-full h-full bg-gradient-to-r from-yellow-300 to-red-300 opacity-0 
-                            group-hover:opacity-20 transition-opacity duration-300"></span>
-              <span className="relative flex items-center">
-                Donate Now
-                <svg 
-                  className="ml-2 w-5 h-5 transform transition-transform duration-300 group-hover:translate-x-1" 
-                  fill="none" 
-                  viewBox="0 0 24 24" 
-                  stroke="currentColor"
-                >
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
-                </svg>
-              </span>
-            </Link>
-
-            <Link
-              to="/campaigns"
-              className="px-8 py-3 font-bold text-yellow-100 rounded-full border-2 border-yellow-300/30
-                        hover:bg-white/10 transform transition-all duration-300 hover:scale-105
-                        focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:ring-offset-2"
-            >
-              View Campaigns
-            </Link>
-          </div>
+          {/* Trust Indicators */}
+          {/* <div className="mt-20">
+            <p className="text-center text-gray-600 text-sm mb-6">Trusted by leading organizations worldwide</p>
+            <div className="flex justify-center items-center gap-12 opacity-70 grayscale hover:grayscale-0 transition-all duration-300">
+              {[1, 2, 3, 4, 5].map((i) => (
+                <div key={i} className="h-8">
+                  <img
+                    src={`https://placehold.co/120x30?text=LOGO${i}`}
+                    alt={`Partner ${i}`}
+                    className="h-full object-contain"
+                  />
+                </div>
+              ))}
+            </div>
+          </div> */}
         </div>
       </div>
     </div>
   );
 };
-
-// Add custom animations to tailwind
-const style = document.createElement('style');
-style.textContent = `
-  @keyframes contentFade {
-    from {
-      opacity: 0;
-      transform: translateY(20px);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
-  }
-  .animate-contentFade {
-    animation: contentFade 1s ease-out forwards;
-  }
-
-  .animate-scrollIndicator {
-    animation: scrollIndicator 2s ease-in-out infinite;
-  }
-`;
-document.head.appendChild(style);
 
 export default Hero;

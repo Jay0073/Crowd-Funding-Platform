@@ -1,129 +1,112 @@
-import React, { useState } from "react";
-import { ChevronDown } from "lucide-react";
-import { Link } from "react-router-dom";
+import React, { useState, useEffect } from 'react';
+import { Menu, X } from 'lucide-react';
 
-const Navbar = () => {
-    const [isLoginHovered, setIsLoginHovered] = useState(false);
-    const [isLoginClicked, setIsLoginClicked] = useState(false);
+const NavLink = ({ href, children }) => (
+  <a
+    href={href}
+    className="text-gray-700 hover:text-blue-600 px-5 py-2 text-[15px] font-medium transition-all duration-200 hover:scale-105"
+  >
+    {children}
+  </a>
+);
 
-    return (
-        <nav className="sticky top-0 z-50 bg-transparent backdrop-blur-md shadow-md transition-colors duration-300">
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div className="flex items-center justify-between h-16">
-                    {/* Logo and Name */}
-                    <div className="flex items-center space-x-3">
-                        <div className="flex-shrink-0">
-                            <div className="w-10 h-10 bg-gradient-to-r from-yellow-400 to-red-400 rounded-lg flex items-center justify-center transform transition-transform duration-300 hover:scale-110">
-                                <span className="text-white text-[25px] font-bold">CF</span>
-                            </div>
-                        </div>
-                        <div className="text-[30px] font-bold bg-gradient-to-r from-yellow-500 to-red-500 bg-clip-text text-transparent">
-                            CrowdFund
-                        </div>
-                    </div>
+const Button = ({ variant = 'default', children, className = '' }) => {
+  const variants = {
+    default: 'bg-gray-100 text-gray-800 hover:bg-gray-200',
+    primary: 'bg-blue-600 text-white hover:bg-blue-700',
+    outline: 'border-2 border-blue-600 text-blue-600 hover:bg-blue-50'
+  };
 
-                    {/* Navigation Links */}
-                    <div className="flex items-center space-x-8">
-                        <Link
-                            to="/campaigns"
-                            className="text-gray-900 hover:text-yellow-500 dark:text-gray-700 dark:hover:text-yellow-400 transition-colors duration-300"
-                            style={{ fontWeight: "600" , fontSize: "1.2rem"}}
-                        >
-                            Campaigns
-                        </Link>
-                        <Link
-                            to="/about"
-                            className="text-gray-900 hover:text-yellow-500 dark:text-gray-700 dark:hover:text-yellow-400 transition-colors duration-300"
-                            style={{ fontWeight: "600" , fontSize: "1.2rem"}}
-                        >
-                            About Us
-                        </Link>
-
-                        {/* Login Button with Dropdown */}
-                        <div className="relative">
-                            <button
-                                onMouseEnter={() => setIsLoginHovered(true)}
-                                onMouseLeave={() => setIsLoginHovered(false)}
-                                onClick={() => setIsLoginClicked(!isLoginClicked)}
-                                className="px-6 py-2 rounded-full bg-gradient-to-r from-yellow-400 to-red-400 text-white font-medium 
-                                                                                                transform transition-all duration-300 hover:scale-105 hover:shadow-lg 
-                                                                                                active:scale-95 focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:ring-offset-2"
-                            >
-                                Login
-                                <ChevronDown size={24} className="inline-block ml-2" />
-                            </button>
-
-                            {/* Dropdown Menu */}
-                            {(isLoginHovered || isLoginClicked) && (
-                                <div
-                                    className="absolute right-0 mt-2 w-56 rounded-xl bg-yellow-50 dark:bg-white-700 shadow-xl border border-gray-100 dark:border-blue-700 
-                                                                                                        transform origin-top animate-dropdownEnter"
-                                    onMouseEnter={() => setIsLoginHovered(true)}
-                                    onMouseLeave={() => {
-                                        setIsLoginHovered(false);
-                                        setIsLoginClicked(false);
-                                    }}
-                                >
-                                    <div className="p-2 space-y-1">
-                                        <Link
-                                            to="/donor-login"
-                                            className="block px-4 py-3 rounded-lg text-gray-700 dark:text-gray-800 hover:bg-yellow-100 dark:hover:bg-orange-200 
-                                                                                                                        transition-colors duration-200 flex items-center space-x-3"
-                                        >
-                                            <span className="w-8 h-8 flex items-center justify-center rounded-full bg-yellow-200 dark:bg-yellow-500">
-                                                👤
-                                            </span>
-                                            <div>
-                                                <div className="font-medium">Donor Login</div>
-                                                <div className="text-xs text-gray-700 ">
-                                                    For individual supporters
-                                                </div>
-                                            </div>
-                                        </Link>
-
-                                        <Link
-                                            to="/org-login"
-                                            className="block px-4 py-3 rounded-lg text-gray-700 dark:text-gray-800 hover:bg-yellow-100 dark:hover:bg-orange-200 
-                                                                                                                        transition-colors duration-200 flex items-center space-x-3"
-                                        >
-                                            <span className="w-8 h-8 flex items-center justify-center rounded-full bg-red-200 dark:bg-red-500">
-                                                🏢
-                                            </span>
-                                            <div>
-                                                <div className="font-medium">Organization Login</div>
-                                                <div className="text-xs text-gray-700">
-                                                    For campaign creators
-                                                </div>
-                                            </div>
-                                        </Link>
-                                    </div>
-                                </div>
-                            )}
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </nav>
-    );
+  return (
+    <button
+      className={`px-6 py-2.5 rounded-full font-semibold text-[15px] transition-all duration-200 transform hover:scale-105 active:scale-100 ${variants[variant]} ${className}`}
+    >
+      {children}
+    </button>
+  );
 };
 
-// Add custom animation to tailwind
-const style = document.createElement("style");
-style.textContent = `
-    @keyframes dropdownEnter {
-        from {
-            opacity: 0;
-            transform: scale(0.95) translateY(-10px);
-        }
-        to {
-            opacity: 1;
-            transform: scale(1) translateY(0);
-        }
-    }
-    .animate-dropdownEnter {
-        animation: dropdownEnter 0.2s ease-out forwards;
-    }
-`;
-document.head.appendChild(style);
+const Navbar = () => {
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [scrollY, setScrollY] = useState(0);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setScrollY(window.scrollY);
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  return (
+    <nav 
+      className={`fixed w-full z-50 transition-all duration-300 ${
+        scrollY > 50 ? 'bg-white/95 backdrop-blur-sm shadow-[0_2px_15px_-3px_rgba(0,0,0,0.07)]' : 'bg-transparent'
+      }`}
+    >
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="flex justify-between items-center h-20">
+          {/* Logo and Name */}
+          <div className="flex items-center space-x-3">
+            <div className="h-10 w-10 rounded-lg bg-blue-600 flex items-center justify-center">
+              <span className="text-xl font-bold text-white">CF</span>
+            </div>
+            <span className="text-4xl font-semibold bg-gradient-to-r from-blue-600 to-blue-800 bg-clip-text text-transparent">
+              CrowdFund
+            </span>
+          </div>
+
+          {/* Desktop Navigation */}
+          <div className="hidden md:flex items-center space-x-2">
+            <NavLink href="/campaigns"><span className='text-[20px] font-semibold'>All Campaigns</span></NavLink>
+            <NavLink href="/aboutus"><span className='text-[20px] font-semibold'>About Us</span></NavLink>
+            <div className="pl-4 flex items-center space-x-3">
+              <Button variant="outline">Login</Button>
+              <Button variant="primary">Start Campaign</Button>
+            </div>
+          </div>
+
+          {/* Mobile menu button */}
+          <div className="md:hidden">
+            <button
+              onClick={() => setIsMenuOpen(!isMenuOpen)}
+              className="text-gray-600 hover:text-gray-900 p-2 rounded-md"
+              aria-label="Toggle menu"
+            >
+              {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
+            </button>
+          </div>
+        </div>
+
+        {/* Mobile Navigation */}
+        <div className={`md:hidden transition-all duration-300 ease-in-out ${
+          isMenuOpen ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'
+        } overflow-hidden`}>
+          <div className="px-2 pt-2 pb-3 space-y-2 bg-white rounded-lg shadow-lg mb-4">
+            <a
+              href="/campaigns"
+              className="block px-4 py-2.5 text-[15px] font-medium text-gray-700 hover:text-blue-600 hover:bg-gray-50 rounded-md transition-colors duration-200"
+              onClick={() => setIsMenuOpen(false)}
+            >
+              All Campaigns
+            </a>
+            <a
+              href="/about"
+              className="block px-4 py-2.5 text-[15px] font-medium text-gray-700 hover:text-blue-600 hover:bg-gray-50 rounded-md transition-colors duration-200"
+              onClick={() => setIsMenuOpen(false)}
+            >
+              About Us
+            </a>
+            <div className="px-4 py-2.5 space-y-2">
+              <Button variant="outline" className="w-full">Login</Button>
+              <Button variant="primary" className="w-full">Start Campaign</Button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </nav>
+  );
+};
 
 export default Navbar;
