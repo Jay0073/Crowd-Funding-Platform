@@ -67,10 +67,12 @@ const FundraiserSteps = () => {
 
             {/* CTA Button */}
             <div className="mt-8">
+              <a href="/fundraisingform">
               <button className="inline-flex text-[20px] items-center px-6 py-3 rounded-full bg-blue-600 text-white font-medium transition-all duration-200 hover:bg-blue-700 ml-10">
                 Start Fundraising Now
                 <ArrowRight className="ml-2" size={28} />
               </button>
+              </a>
             </div>
           </div>
 

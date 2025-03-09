@@ -1,6 +1,29 @@
 import React, { useState } from 'react';
 import { X, DollarSign, AlertCircle } from 'lucide-react';
 
+// Move InputField outside so it doesn’t get re-created on every render.
+const InputField = ({ label, name, type = 'text', placeholder, value, onChange, error }) => (
+  <div className="mb-4">
+    <label className="block text-sm font-medium text-gray-700 mb-1">{label}</label>
+    <input
+      type={type}
+      name={name}
+      value={value}
+      onChange={onChange}
+      placeholder={placeholder}
+      className={`w-full px-4 py-3 rounded-lg border ${
+        error ? 'border-red-500' : 'border-gray-200'
+      } focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all duration-200`}
+    />
+    {error && (
+      <div className="flex items-center gap-1 mt-1 text-red-500 text-sm">
+        <AlertCircle size={14} />
+        <span>{error}</span>
+      </div>
+    )}
+  </div>
+);
+
 const ContributionPopup = ({ onClose, fundraiserName }) => {
   const [selectedAmount, setSelectedAmount] = useState('');
   const [customAmount, setCustomAmount] = useState('');
@@ -30,6 +53,8 @@ const ContributionPopup = ({ onClose, fundraiserName }) => {
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
+    // Log to verify input handles changes correctly
+    // console.log("Input change:", name, value);
     setFormData((prevData) => ({
       ...prevData,
       [name]: value
@@ -83,28 +108,6 @@ const ContributionPopup = ({ onClose, fundraiserName }) => {
     }
   };
 
-  const InputField = ({ label, name, type = 'text', placeholder, value, onChange, error }) => (
-    <div className="mb-4">
-      <label className="block text-sm font-medium text-gray-700 mb-1">{label}</label>
-      <input
-        type={type}
-        name={name}
-        value={value}
-        onChange={onChange}
-        placeholder={placeholder}
-        className={`w-full px-4 py-3 rounded-lg border ${
-          error ? 'border-red-500' : 'border-gray-200'
-        } focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all duration-200`}
-      />
-      {error && (
-        <div className="flex items-center gap-1 mt-1 text-red-500 text-sm">
-          <AlertCircle size={14} />
-          <span>{error}</span>
-        </div>
-      )}
-    </div>
-  );
-
   return (
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
       <div className="bg-white rounded-2xl w-full max-w-md max-h-[90vh] overflow-y-auto">
@@ -125,7 +128,9 @@ const ContributionPopup = ({ onClose, fundraiserName }) => {
         <div className="px-6 py-3">
           {/* Amount Selection */}
           <div className="mb-6">
-            <label className="block text-sm font-medium text-gray-700 mb-3">Select Amount</label>
+            <label className="block text-sm font-medium text-gray-700 mb-3">
+              Select Amount
+            </label>
             <div className="grid grid-cols-3 gap-3 mb-4">
               {predefinedAmounts.map((value) => (
                 <button
@@ -134,7 +139,7 @@ const ContributionPopup = ({ onClose, fundraiserName }) => {
                   className={`py-3 rounded-lg font-medium transition-all duration-200 ${
                     selectedAmount === value.toString()
                       ? 'bg-blue-600 text-white'
-                      : 'bg-gray-50 text-gray-900 hover:bg-gray-100'
+                      : 'bg-gray-50 text-gray-900 hover:bg-blue-100'
                   }`}
                 >
                   ${value}
@@ -167,18 +172,46 @@ const ContributionPopup = ({ onClose, fundraiserName }) => {
           </div>
 
           {/* Donor Information Form */}
-          <InputField label="Full Name" name="name" placeholder="Enter your name" value={formData.name} onChange={handleInputChange} error={errors.name} />
+          <InputField
+            label="Full Name"
+            name="name"
+            placeholder="Enter your name"
+            value={formData.name}
+            onChange={handleInputChange}
+            error={errors.name}
+          />
 
-          <InputField label="Mobile Number" name="mobile" type="tel" placeholder="Enter 10-digit mobile number" value={formData.mobile} onChange={handleInputChange} error={errors.mobile} />
+          <InputField
+            label="Mobile Number"
+            name="mobile"
+            type="tel"
+            placeholder="Enter 10-digit mobile number"
+            value={formData.mobile}
+            onChange={handleInputChange}
+            error={errors.mobile}
+          />
 
-          <InputField label="Email" name="email" type="email" placeholder="Enter your email" value={formData.email} onChange={handleInputChange} error={errors.email} />
+          <InputField
+            label="Email"
+            name="email"
+            type="email"
+            placeholder="Enter your email"
+            value={formData.email}
+            onChange={handleInputChange}
+            error={errors.email}
+          />
 
           {/* Proceed Button */}
-          <button onClick={handleSubmit} className="w-full mt-6 py-4 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700 transition-colors">
+          <button
+            onClick={handleSubmit}
+            className="w-full mt-6 py-4 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700 transition-colors"
+          >
             Proceed to Pay ${displayAmount}
           </button>
 
-          <p className="text-center text-sm text-gray-500 mt-4">🔒 Secure payment powered by Stripe</p>
+          <p className="text-center text-sm text-gray-500 mt-4">
+            🔒 Secure payment powered by Stripe
+          </p>
         </div>
       </div>
     </div>

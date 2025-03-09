@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Share2,
   Calendar,
@@ -115,6 +115,7 @@ const FundraiserPage = () => {
   const [showAllSupporters, setShowAllSupporters] = useState(false);
   const [isShareMenuOpen, setIsShareMenuOpen] = useState(false);
 
+
   // Sample data
   const fundraiser = {
     imageUrl: donate2,
@@ -177,6 +178,40 @@ const FundraiserPage = () => {
   };
 
   const [showPaymentPopup, setShowPaymentPopup] = useState(false);
+
+  useEffect(() => {
+    // Function to prevent scrolling
+    const preventScroll = (e) => {
+      e.preventDefault();
+      e.stopPropagation(); // Stop event bubbling
+      return false;
+    };
+
+    if (showPaymentPopup) {
+      // Add event listeners to prevent scrolling
+      window.addEventListener("wheel", preventScroll, { passive: false }); // Modern browsers
+      window.addEventListener("touchmove", preventScroll, { passive: false }); // For touch devices
+      document.body.style.overflow = "hidden"; // fallback for some cases
+    } else {
+      // Remove event listeners
+      window.removeEventListener("wheel", preventScroll);
+      window.removeEventListener("touchmove", preventScroll);
+      document.body.style.overflow = "unset";
+    }
+
+    // Cleanup function to remove listeners when component unmounts or state changes
+    return () => {
+      window.removeEventListener("wheel", preventScroll);
+      window.removeEventListener("touchmove", preventScroll);
+      document.body.style.overflow = "unset";
+    };
+  }, [showPaymentPopup]);
+
+  useEffect(() => {
+      if (showPaymentPopup) {
+        window.scrollTo(0, 0);
+      }
+    }, [showPaymentPopup]);
 
   return (
     <div className="min-h-screen bg-gray-50 py-24">

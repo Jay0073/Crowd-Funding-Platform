@@ -7,6 +7,8 @@ import Navbar from './Components/NavBar';
 import Footer from './Components/Footer';
 import ExplorePage from './Pages/ExplorePage';
 import FundraiserPage from './Pages/FundraiserPage';
+import ScrollToTop from './Components/ScrollToTop';
+import FundraiserForm from './Pages/FundraiserForm';
 
 function App() {
 
@@ -14,11 +16,13 @@ function App() {
     <>
       <Navbar />    
       <Router>
+        <ScrollToTop />
             <Routes>
               <Route path="/" element={<LandingPage />} />
               <Route path="/aboutus" element={<AboutUs />} />
               <Route path="/explore" element={<ExplorePage />} />
               <Route path="/donate/:id" element={<FundraiserPage />} />
+              <Route path='/fundraisingform' element={<FundraiserForm />} />
             </Routes>
         </Router>
         <Footer />
