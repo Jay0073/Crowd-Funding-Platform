@@ -83,12 +83,32 @@ const AuthPopup = ({ onClose, returnTo }) => {
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (validateForm()) {
-      console.log("Form submitted:", formData);
-      // Handle authentication logic here
-      window.location.href = returnTo || "/";
+      try {
+        const response = await fetch('/signup', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(formData),
+        });
+
+        if (response.ok) {
+          const resData = await response.json();
+          console.log("User created successfully:", resData);
+          // Handle successful signup logic here
+          window.location.href = returnTo || "/";
+        } else {
+          const errorData = await response.json();
+          console.error("Error:", errorData);
+          // Handle error logic here
+        }
+      } catch (error) {
+        console.error("Error:", error);
+        // Handle network error here
+      }
     }
   };
 
