@@ -35,14 +35,12 @@ const FundraiserForm = () => {
         email: '',
         phone: '',
         address: '',
-        organization: '',
         
         // Bank Details
         accountHolder: '',
         accountNumber: '',
         bankName: '',
         upinumber: '',
-        panNumber: '',
         
         // Documents
         documents: [],
@@ -78,7 +76,7 @@ const FundraiserForm = () => {
         {
             title: "Personal Info",
             icon: UserCircle,
-            fields: ['fullName', 'email', 'phone', 'address', 'organization']
+            fields: ['fullName', 'email', 'phone', 'address']
         },
         {
             title: "Bank Details",
@@ -328,14 +326,7 @@ const FundraiserForm = () => {
                             )}
                         </div>
 
-                        <InputField
-                            icon={Building}
-                            label="Organization (Optional)"
-                            name="organization"
-                            placeholder="Enter organization name if applicable"
-                            value={formData.organization}
-                            onChange={handleInputChange}
-                        />
+                        
                     </div>
                 );
 
