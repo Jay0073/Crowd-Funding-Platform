@@ -7,6 +7,7 @@ import FundraiserSteps from '../Components/FundraiserSteps'
 import FAQ from '../Components/FAQ'
 import Footer from '../Components/Footer'
 import Testimonials from '../Components/Testimonials'
+import FundraiserPage from './FundraiserPage'
 
 const LandingPage = () => {
   return (
@@ -18,7 +19,6 @@ const LandingPage = () => {
       <FundraiserSteps />
       <Testimonials />
       <FAQ />
-      <Footer />
     </div>
   )
 }

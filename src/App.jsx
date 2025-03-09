@@ -5,6 +5,8 @@ import LandingPage from './Pages/LandingPage';
 import AboutUs from './Pages/AboutUs';
 import Navbar from './Components/NavBar';
 import Footer from './Components/Footer';
+import ExplorePage from './Pages/ExplorePage';
+import FundraiserPage from './Pages/FundraiserPage';
 
 function App() {
 
@@ -15,6 +17,8 @@ function App() {
             <Routes>
               <Route path="/" element={<LandingPage />} />
               <Route path="/aboutus" element={<AboutUs />} />
+              <Route path="/explore" element={<ExplorePage />} />
+              <Route path="/donate/:id" element={<FundraiserPage />} />
             </Routes>
         </Router>
         <Footer />

@@ -1,53 +1,101 @@
-import React, { useState } from 'react';
-import { 
-  Search, 
-  SlidersHorizontal, 
+import React, { useState } from "react";
+import {
+  Search,
+  SlidersHorizontal,
   ChevronDown,
-  ArrowDownUp
-} from 'lucide-react';
+  ArrowDownUp,
+} from "lucide-react";
+import FundraiserCard from "../Components/FundraiserCard";
+import img5 from '../assets/child5.jpeg';
+import FundraiserPage from "./FundraiserPage";
 
 // Assuming you have your FundraiserCard component from Features
 // Import it like this:
 // import FundraiserCard from './FundraiserCard';
 
 const ExplorePage = () => {
-  const [selectedCategory, setSelectedCategory] = useState('All');
-  const [sortBy, setSortBy] = useState('Recent');
+  const [selectedCategory, setSelectedCategory] = useState("All");
+  const [sortBy, setSortBy] = useState("Recent");
 
   const categories = [
-    'All',
-    'Medical',
-    'Education',
-    'Emergency',
-    'Animal Welfare',
-    'Community',
-    'Sports',
-    'Creative',
-    'Volunteer'
+    "All",
+    "Medical",
+    "Education",
+    "Emergency",
+    "Animal Welfare",
+    "Community",
+    "Sports",
+    "Creative",
+    "Volunteer",
   ];
 
   // Sample fundraiser data
   const fundraisers = [
     {
-      id: 1,
-      title: "Help Sarah Beat Cancer",
-      category: "Medical",
-      image: "https://placehold.co/400x300",
-      description: "Support Sarah's fight against cancer with life-saving treatment.",
-      raised: 45000,
-      goal: 60000,
-      daysLeft: 12
+      id: 6,
+      imageUrl: img5,
+      title: "Community Center Renovation",
+      fundraiserName: "Lisa Anderson",
+      currentAmount: 32000,
+      goalAmount: 45000,
+      endDate: "2024-04-30",
+    },
+    {
+      id: 7,
+      imageUrl: img5,
+      title: "Community Center Renovation",
+      fundraiserName: "Lisa Anderson",
+      currentAmount: 32000,
+      goalAmount: 45000,
+      endDate: "2024-04-30",
+    },
+    {
+      id: 8,
+      imageUrl: img5,
+      title: "Community Center Renovation",
+      fundraiserName: "Lisa Anderson",
+      currentAmount: 32000,
+      goalAmount: 45000,
+      endDate: "2024-04-30",
+    },
+    {
+      id: 9,
+      imageUrl: img5,
+      title: "Community Center Renovation",
+      fundraiserName: "Lisa Anderson",
+      currentAmount: 32000,
+      goalAmount: 45000,
+      endDate: "2024-04-30",
+    },
+    {
+      id: 10,
+      imageUrl: img5,
+      title: "Community Center Renovation",
+      fundraiserName: "Lisa Anderson",
+      currentAmount: 32000,
+      goalAmount: 45000,
+      endDate: "2024-04-30",
+    },
+    {
+      id: 11,
+      imageUrl: img5,
+      title: "Community Center Renovation",
+      fundraiserName: "Lisa Anderson",
+      currentAmount: 32000,
+      goalAmount: 45000,
+      endDate: "2024-04-30",
     },
     // Add more fundraiser objects...
   ];
 
   return (
-    <div className="min-h-screen bg-gray-50 py-12">
+    
+    <div className="min-h-screen bg-gray-50 pt-24 pb-12">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Page Header */}
         <div className="text-center mb-12">
-          <h1 className="text-3xl font-bold text-gray-900 mb-4">
-            Explore Fundraisers
+          <h1 className="text-5xl font-semibold text-gray-900 mb-4">
+            Explore <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-blue-800"> Fundraisers</span>
           </h1>
           <p className="text-gray-600">
             Discover and support causes that matter to you
@@ -55,18 +103,6 @@ const ExplorePage = () => {
         </div>
 
         <div className="flex gap-8">
-          {/* Main Content - Fundraiser Cards (3/5) */}
-          <div className="w-3/5">
-            <div className="grid grid-cols-2 gap-6">
-              {fundraisers.map((fundraiser) => (
-                <FundraiserCard 
-                  key={fundraiser.id}
-                  {...fundraiser}
-                />
-              ))}
-            </div>
-          </div>
-
           {/* Sidebar - Search & Filters (2/5) */}
           <div className="w-2/5">
             <div className="bg-white rounded-xl shadow-lg p-6 sticky top-6">
@@ -75,10 +111,13 @@ const ExplorePage = () => {
                 <div className="relative">
                   <input
                     type="text"
-                    placeholder="Search fundraisers..."
+                    placeholder="Search fundraisers by title..."
                     className="w-full px-4 py-3 pl-12 rounded-lg border border-gray-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all duration-200"
                   />
-                  <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" size={20} />
+                  <Search
+                    className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400"
+                    size={20}
+                  />
                 </div>
               </div>
 
@@ -98,10 +137,10 @@ const ExplorePage = () => {
                 {/* Categories */}
                 <div>
                   <h4 className="font-medium text-gray-900 mb-3">Categories</h4>
-                  <div className="space-y-2">
+                  <div className="space-y-2 flex flex-wrap gap-x-4">
                     {categories.map((category) => (
-                      <label 
-                        key={category} 
+                      <label
+                        key={category}
                         className="flex items-center gap-2 cursor-pointer"
                       >
                         <input
@@ -119,7 +158,9 @@ const ExplorePage = () => {
 
                 {/* Amount Range */}
                 <div>
-                  <h4 className="font-medium text-gray-900 mb-3">Amount Range</h4>
+                  <h4 className="font-medium text-gray-900 mb-3">
+                    Amount Range
+                  </h4>
                   <div className="flex gap-4">
                     <input
                       type="number"
@@ -149,7 +190,10 @@ const ExplorePage = () => {
                       <option value="AmountLow">Amount (Low to High)</option>
                       <option value="Urgent">Most Urgent</option>
                     </select>
-                    <ArrowDownUp className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400" size={16} />
+                    <ArrowDownUp
+                      className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400"
+                      size={16}
+                    />
                   </div>
                 </div>
 
@@ -160,6 +204,17 @@ const ExplorePage = () => {
               </div>
             </div>
           </div>
+
+          {/* Main Content - Fundraiser Cards (3/5) */}
+          <div className="w-3/5">
+            <div className="grid grid-cols-2 gap-6">
+              {fundraisers.map((fundraiser) => (
+                <FundraiserCard key={fundraiser.id} {...fundraiser} />
+              ))}
+            </div>
+          </div>
+
+          
         </div>
       </div>
     </div>

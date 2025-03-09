@@ -59,7 +59,7 @@ const Navbar = () => {
 
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center space-x-2">
-            <NavLink href="/campaigns"><span className='text-[20px] font-semibold'>All Campaigns</span></NavLink>
+            <NavLink href="/explore"><span className='text-[20px] font-semibold'>All Campaigns</span></NavLink>
             <NavLink href="/aboutus"><span className='text-[20px] font-semibold'>About Us</span></NavLink>
             <div className="pl-4 flex items-center space-x-3">
               <Button variant="outline">Login</Button>
