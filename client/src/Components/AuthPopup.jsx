@@ -11,6 +11,7 @@ import {
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import InputField from "./InputField"; // Import the InputField component
+import axios from "axios"; // Import axios for making HTTP requests
 
 const AuthPopup = ({ onClose, returnTo }) => {
   const [isLogin, setIsLogin] = useState(true);
@@ -86,29 +87,53 @@ const AuthPopup = ({ onClose, returnTo }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (validateForm()) {
-      try {
-        const response = await fetch('/signup', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(formData),
-        });
-
-        if (response.ok) {
-          const resData = await response.json();
-          console.log("User created successfully:", resData);
-          // Handle successful signup logic here
-          window.location.href = returnTo || "/";
-        } else {
-          const errorData = await response.json();
-          console.error("Error:", errorData);
-          // Handle error logic here
-        }
-      } catch (error) {
-        console.error("Error:", error);
-        // Handle network error here
+      if (isLogin) {
+        await loginUser();
+      } else {
+        await signupUser();
       }
+    }
+  };
+
+  const loginUser = async () => {
+    console.log("logging the user")
+    try {
+      const response = await axios.post('/login', formData, {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+
+      if (response.status === 200) {
+        console.log("User logged in successfully:", response.data);
+        localStorage.setItem('token', response.data.token);
+        window.location.href = returnTo || "/";
+      } else {
+        console.error("Error:", response.data);
+      }
+    } catch (error) {
+      console.error("Error:", error);
+    }
+  };
+
+  const signupUser = async () => {
+    console.log("signing the user")
+    try {
+      const response = await axios.post('/signup', formData, {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+
+      if (response.status === 200) {
+        console.log("User created successfully:", response.data);
+        localStorage.setItem('token', response.data.token);
+        window.location.href = returnTo || "/";
+      } else {
+        console.error("Error:", response.data);
+      }
+    } catch (error) {
+      console.error("Error:", error);
     }
   };
 

@@ -13,18 +13,19 @@ const app = express();
 app.use(cors());
 app.use(bodyParser.json());
 app.use(express.json());
-
+ 
 // MongoDB Connection
 mongoose.connect(process.env.MONGODB_URI, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
-});
+}).then(() => console.log(colors.green('MongoDB connected successfully')))
+.catch((err) => console.error(colors.red('MongoDB connection error:', err)));
 
 // User Schema
 const userSchema = new mongoose.Schema({
   name: { type: String, required: true },
   email: { type: String, required: true, unique: true },
-  phoneno: { type: String, required: true, unique: true },
+  mobile: { type: String, required: true, unique: true },
   password: { type: String, required: true },
   createdAt: { type: Date, default: Date.now },
 });
@@ -59,8 +60,9 @@ const Donation = mongoose.model("Donation", donationSchema);
 
 // User registration with password hashing
 app.post('/signup', async (req, res) => {
+    console.log(colors.yellow("signing the user"))
     try {
-        const { name, email, password, phoneno } = req.body;
+        const { name, email, mobile, password } = req.body;
 
         // Check if user already exists
         const existingUser = await User.findOne({ email });
@@ -77,7 +79,7 @@ app.post('/signup', async (req, res) => {
             name,
             email,
             password: hashedPassword,
-            phoneno,
+            mobile,
         });
 
         await user.save();
@@ -96,16 +98,18 @@ app.post('/signup', async (req, res) => {
                 id: user._id,
                 name: user.name,
                 email: user.email,
-                phoneno: user.phoneno
+                mobile: user.mobile
             }
         });
     } catch (error) {
+        console.error(colors.red(error))
         res.status(500).json({ error: error.message });
     }
 });
 
 // User login
 app.post('/login', async (req, res) => {
+    console.log(colors.yellow("logging the user"))
     try {
         const { email, password } = req.body;
 
@@ -115,7 +119,7 @@ app.post('/login', async (req, res) => {
             return res.status(401).json({ error: 'Invalid email or password' });
         }
 
-        // Verify password
+        // Verify password 
         const isPasswordValid = await bcrypt.compare(password, user.password);
         if (!isPasswordValid) {
             return res.status(401).json({ error: 'Invalid email or password' });
@@ -137,6 +141,7 @@ app.post('/login', async (req, res) => {
             }
         });
     } catch (error) {
+        console.error(colors.red(error))
         res.status(500).json({ error: error.message });
     }
 });
@@ -150,7 +155,7 @@ app.post("/campaigns", async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 });
-
+ 
 app.post("/donations", async (req, res) => {
   try {
     const donation = new Donation(req.body);
