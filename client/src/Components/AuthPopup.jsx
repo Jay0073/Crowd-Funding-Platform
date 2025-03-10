@@ -98,7 +98,7 @@ const AuthPopup = ({ onClose, returnTo }) => {
   const loginUser = async () => {
     console.log("logging the user")
     try {
-      const response = await axios.post('/login', formData, {
+      const response = await axios.post('http://localhost:5000/login', formData, {
         headers: {
           'Content-Type': 'application/json',
         },
@@ -118,14 +118,15 @@ const AuthPopup = ({ onClose, returnTo }) => {
 
   const signupUser = async () => {
     console.log("signing the user")
+    console.log("Sending formData:", formData);
     try {
-      const response = await axios.post('/signup', formData, {
+      const response = await axios.post('http://localhost:5000/signup', formData, {
         headers: {
-          'Content-Type': 'application/json',
+          // 'Content-Type': 'application/json',
         },
       });
 
-      if (response.status === 200) {
+      if (response.status === 201) {
         console.log("User created successfully:", response.data);
         localStorage.setItem('token', response.data.token);
         window.location.href = returnTo || "/";
