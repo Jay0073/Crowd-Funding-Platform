@@ -14,10 +14,10 @@ const ProgressBar = ({current, goal}) => {
         </div>
         <div className="flex justify-between items-center mt-2 text-sm">
           <span className="font-medium text-blue-600">
-            ${current.toLocaleString()}
+            ${current}
           </span>
           <span className="text-gray-500">
-            raised of ${goal.toLocaleString()}
+            raised of ${goal}
           </span>
         </div>
       </div>

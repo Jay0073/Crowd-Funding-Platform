@@ -29,13 +29,6 @@ class ErrorBoundary extends Component {
   }
 }
 
-// : `FUND-${uuidv4()}`,
-  // title,
-  // category
-  // targetAmount,
-  // raisedAmount: raisedAmount || 0,
-  // endDate,
-  // name: user.name,
 
 const FundraiserCard = ({
   fundId,
@@ -67,7 +60,7 @@ const FundraiserCard = ({
       {/* Image Container */}
       <div className="relative h-58 overflow-hidden">
         <img
-          src={`http://localhost:5000${documents[0]}`}
+          src={`http://localhost:5000${documents}`}
           alt={title}
           className="w-full h-full object-cover transform hover:scale-110 transition-transform duration-500"
         />
@@ -87,14 +80,14 @@ const FundraiserCard = ({
           </h3>
           <p className="text-gray-600 text-sm">
             by{" "}
-            <span className="font-medium text-gray-900">{fundraiserName}</span>
+            <span className="font-medium text-gray-900">{name}</span>
           </p>
         </div>
 
-        <ErrorBoundary>
+
           {/* Progress Section */}
-          <ProgressBar current={currentAmount} goal={goalAmount} />
-        </ErrorBoundary>
+          <ProgressBar current={raisedAmount} goal={targetAmount} />
+    
 
         {/* Action Buttons */}
         <div className="flex gap-3 pt-2">
@@ -106,8 +99,8 @@ const FundraiserCard = ({
             <span>Share</span>
           </button>
           <NavLink
-            to={`/donate/${id}`}
-            onClick={() => handleDonate(id)}
+            to={`/donate/${fundId}`}
+            onClick={() => handleDonate(fundId)}
             className="flex-1 flex items-center justify-center gap-2 px-4 py-3 rounded-full bg-blue-600 text-white font-medium transition-all duration-200 hover:bg-blue-700 hover:scale-105 active:scale-100"
           >
             <Heart size={18} />
