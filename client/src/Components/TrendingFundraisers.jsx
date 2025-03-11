@@ -1,64 +1,25 @@
 import React, { useState, useEffect, useRef } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
+import axios from 'axios';
 import FundraiserCard from "./FundraiserCard";
-import img1 from '../assets/child1.jpg';
-import img2 from '../assets/child2.avif';
-import img3 from '../assets/child3.jpg';
-import img4 from '../assets/child4.jpeg';
-import img5 from '../assets/child5.jpeg';
 
 const TrendingFundraisers = () => {
   const [activeIndex, setActiveIndex] = useState(1);
   const [isHovered, setIsHovered] = useState(false);
   const [isAnimating, setIsAnimating] = useState(false);
+  const [fundraisers, setFundraisers] = useState([]);
 
-  const fundraisers = [
-    {
-      id: 1,
-      imageUrl: img1,
-      title: "Education for Rural Children",
-      fundraiserName: "Sarah Johnson",
-      currentAmount: 15000,
-      goalAmount: 30000,
-      endDate: "2024-05-15"
-    },
-    {
-      id: 2,
-      imageUrl: img2,
-      title: "Medical Treatment Fund",
-      fundraiserName: "David Smith",
-      currentAmount: 25000,
-      goalAmount: 50000,
-      endDate: "2024-04-20"
-    },
-    {
-      id: 3,
-      imageUrl: img3,
-      title: "Save the Rainforest",
-      fundraiserName: "Emma Wilson",
-      currentAmount: 40000,
-      goalAmount: 60000,
-      endDate: "2024-06-01"
-    },
-    {
-      id: 4,
-      imageUrl: img4,
-      title: "Animal Shelter Support",
-      fundraiserName: "Michael Brown",
-      currentAmount: 18000,
-      goalAmount: 35000,
-      endDate: "2024-05-10"
-    },
-    {
-      id: 5,
-      imageUrl: img5,
-      title: "Community Center Renovation",
-      fundraiserName: "Lisa Anderson",
-      currentAmount: 32000,
-      goalAmount: 45000,
-      endDate: "2024-04-30"
-    }
-  ];
+  useEffect(() => {
+    const fetchFundraisers = async () => {
+      try {
+        const response = await axios.get("http://localhost:5000/fetchfundraises");
+        setFundraisers(response.data);
+      } catch (error) {
+        console.error("Error fetching fundraisers:", error);
+      }
+    };
+    fetchFundraisers();
+  }, []);
 
   useEffect(() => {
     let intervalId;

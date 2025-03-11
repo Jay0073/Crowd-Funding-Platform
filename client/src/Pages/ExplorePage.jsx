@@ -1,91 +1,38 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+
 import {
   Search,
   SlidersHorizontal,
-  ChevronDown,
   ArrowDownUp,
 } from "lucide-react";
 import FundraiserCard from "../Components/FundraiserCard";
-import img5 from '../assets/child5.jpeg';
-import FundraiserPage from "./FundraiserPage";
-
-// Assuming you have your FundraiserCard component from Features
-// Import it like this:
-// import FundraiserCard from './FundraiserCard';
+import axios from 'axios';
 
 const ExplorePage = () => {
   const [selectedCategory, setSelectedCategory] = useState("All");
   const [sortBy, setSortBy] = useState("Recent");
+  const [fundraisers, setFundraisers] = useState([]);
+
+  useEffect(() => {
+    const fetchFundraisers = async () => {
+      try {
+        const response = await axios.get("http://localhost:5000/fetchfundraises");
+        setFundraisers(response.data);
+      } catch (error) {
+        console.error("Error fetching fundraisers:", error);
+      }
+    };
+    fetchFundraisers();
+  }, []);
 
   const categories = [
     "All",
-    "Medical",
+    "Medical Emergency",
     "Education",
-    "Emergency",
+    "Natural Disaster",
     "Animal Welfare",
-    "Community",
-    "Sports",
-    "Creative",
-    "Volunteer",
-  ];
-
-  // Sample fundraiser data
-  const fundraisers = [
-    {
-      id: 6,
-      imageUrl: img5,
-      title: "Community Center Renovation",
-      fundraiserName: "Lisa Anderson",
-      currentAmount: 32000,
-      goalAmount: 45000,
-      endDate: "2024-04-30",
-    },
-    {
-      id: 7,
-      imageUrl: img5,
-      title: "Community Center Renovation",
-      fundraiserName: "Lisa Anderson",
-      currentAmount: 32000,
-      goalAmount: 45000,
-      endDate: "2024-04-30",
-    },
-    {
-      id: 8,
-      imageUrl: img5,
-      title: "Community Center Renovation",
-      fundraiserName: "Lisa Anderson",
-      currentAmount: 32000,
-      goalAmount: 45000,
-      endDate: "2024-04-30",
-    },
-    {
-      id: 9,
-      imageUrl: img5,
-      title: "Community Center Renovation",
-      fundraiserName: "Lisa Anderson",
-      currentAmount: 32000,
-      goalAmount: 45000,
-      endDate: "2024-04-30",
-    },
-    {
-      id: 10,
-      imageUrl: img5,
-      title: "Community Center Renovation",
-      fundraiserName: "Lisa Anderson",
-      currentAmount: 32000,
-      goalAmount: 45000,
-      endDate: "2024-04-30",
-    },
-    {
-      id: 11,
-      imageUrl: img5,
-      title: "Community Center Renovation",
-      fundraiserName: "Lisa Anderson",
-      currentAmount: 32000,
-      goalAmount: 45000,
-      endDate: "2024-04-30",
-    },
-    // Add more fundraiser objects...
+    "Community Development",
+    "Others",
   ];
 
   return (

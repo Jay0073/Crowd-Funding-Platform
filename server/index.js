@@ -250,7 +250,7 @@ app.post("/donations", async (req, res) => {
 });
 
 // Get all fundraisers
-router.get("/fundraises", async (req, res) => {
+app.get("/fetchfundraises", async (req, res) => {
   try {
     const fundraisers = await Fundraise.find({});
     res.status(200).json(fundraisers);
@@ -260,7 +260,12 @@ router.get("/fundraises", async (req, res) => {
   }
 });
 
+app.get("/", (req, res) => {
+    res.send("hello world")
+})
+
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
   console.log(colors.yellow(`Server running on port ${PORT}`));
 });
+

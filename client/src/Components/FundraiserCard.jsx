@@ -29,13 +29,22 @@ class ErrorBoundary extends Component {
   }
 }
 
+// : `FUND-${uuidv4()}`,
+  // title,
+  // category
+  // targetAmount,
+  // raisedAmount: raisedAmount || 0,
+  // endDate,
+  // name: user.name,
+
 const FundraiserCard = ({
-  id,
-  imageUrl,
+  fundId,
+  documents,
+  category,
   title,
-  fundraiserName,
-  currentAmount,
-  goalAmount,
+  name,
+  raisedAmount,
+  targetAmount,
   endDate,
 }) => {
   // Format date
@@ -45,7 +54,7 @@ const FundraiserCard = ({
     day: "numeric",
   });
 
-  const handleDonate = (id) => {
+  const handleDonate = (fundId) => {
     console.log("donate is clicked and id is", id);
   };
 
@@ -58,7 +67,7 @@ const FundraiserCard = ({
       {/* Image Container */}
       <div className="relative h-58 overflow-hidden">
         <img
-          src={imageUrl}
+          src={`http://localhost:5000${documents[0]}`}
           alt={title}
           className="w-full h-full object-cover transform hover:scale-110 transition-transform duration-500"
         />
