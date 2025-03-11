@@ -44,12 +44,11 @@ const FundraiseSchema = new mongoose.Schema({
   email: {type: String, required: true},
   mobile: {type: String, required: true},
   category: { type:String, required: true},
+  endDate: {type: Date, required: true},
   description: { type: String, required: true },
   targetAmount: { type: Number, required: true },
   raisedAmount: { type: Number, default: 0 },
-  enddate: {type: Date, required: true},
   createdBy: { type: String, required: true, },
-  
   accountHolderName: {type: String, required: true},
   bankName: {type: String, required: true},
   accountNumber: {type: String, required: true},
@@ -188,7 +187,7 @@ app.post("/fundraise", upload.array("documents", 5), async (req, res) => {
       description,
       targetAmount,
       raisedAmount,
-      enddate,
+      endDate,
       accountHolderName,
       bankName,
       accountNumber,
@@ -211,17 +210,15 @@ app.post("/fundraise", upload.array("documents", 5), async (req, res) => {
       description,
       targetAmount,
       raisedAmount: raisedAmount || 0,
-      enddate,
+      endDate,
       createdBy: user.userId, // Store userId here
       name: user.name,
       email: user.email,
       mobile: user.mobile,
-      bankDetails: {
-        accountHolderName,
-        bankName,
-        accountNumber,
-        upiNumber,
-      },
+      accountHolderName,
+      bankName,
+      accountNumber,
+      upiNumber,
       documents,
     });
 
@@ -249,6 +246,17 @@ app.post("/donations", async (req, res) => {
     res.status(201).json({ message: "Donation successful" });
   } catch (error) {
     res.status(500).json({ error: error.message });
+  }
+});
+
+// Get all fundraisers
+router.get("/fundraises", async (req, res) => {
+  try {
+    const fundraisers = await Fundraise.find({});
+    res.status(200).json(fundraisers);
+  } catch (error) {
+    console.error("Error fetching fundraisers:", error);
+    res.status(500).json({ message: "Internal server error" });
   }
 });
 

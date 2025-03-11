@@ -178,32 +178,27 @@ const FundraiserForm = () => {
 
 
   const createFundraiser = async () => {
-  console.log("Submitting fundraiser...");
-
   setIsSubmitting(true);
   setSubmitError(null);
 
   try {
     const formDataToSend = new FormData();
 
-    Object.keys(formData).forEach((key) => {
-      if (key === "documents") {
-        // Append each file
-        formData[key].forEach((file) => formDataToSend.append("documents", file));
-      } else if (typeof formData[key] === "object") {
-        // Flatten nested objects (e.g., bankDetails)
-        Object.keys(formData[key]).forEach((subKey) => {
-          formDataToSend.append(`${subKey}`, formData[key][subKey]);
-        });
-      } else {
-        formDataToSend.append(key, formData[key]);
-      }
-    });
+    Object.entries(formData).forEach(([key, value]) => {
+        if (key === "documents") {
+          value.forEach((file) => formDataToSend.append("documents", file));
+        } else if (typeof value === "object") {
+          // Stringify nested objects (like bankDetails)
+          formDataToSend.append(key, JSON.stringify(value));
+        } else {
+          formDataToSend.append(key, value);
+        }
+      });
 
     const response = await axios.post("http://localhost:5000/fundraise", formDataToSend, {
       headers: {
         "Content-Type": "multipart/form-data",
-        Authorization: `Bearer ${localStorage.getItem("token")}`, // Assuming you're using JWT
+        // Authorization: `Bearer ${localStorage.getItem("token")}`, // Assuming you're using JWT
       },
     });
 
@@ -237,7 +232,6 @@ const FundraiserForm = () => {
         validateStep()
     }
     if (currentStep === 2){
-        console.log("submit clicked")
         await createFundraiser();
     }
   };
