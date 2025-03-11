@@ -7,9 +7,6 @@ import {
     Image as ImageIcon,
     Upload,
     Calendar,
-    Phone,
-    Mail,
-    Building,
     X,
     Check,
     AlertCircle,
@@ -29,33 +26,19 @@ const FundraiserForm = () => {
         description: '',
         targetAmount: '',
         endDate: '',
-        
-        // Personal Details
-        fullName: '',
-        email: '',
-        phone: '',
-        address: '',
-        
-        // Bank Details
-        accountHolder: '',
-        accountNumber: '',
+        accountHolderName: '',
         bankName: '',
-        upinumber: '',
-        
-        // Documents
+        accountNumber: '',
+        upiNumber: '',
         documents: [],
-        profileImage: null
     });
+
     const [errors, setErrors] = useState({});
 
     const quotes = [
         {
             title: "Tell Your Story",
             subtitle: "Every cause has a story. Share yours and inspire others to help."
-        },
-        {
-            title: "About You",
-            subtitle: "Let's get to know the person behind this noble cause."
         },
         {
             title: "Financial Details",
@@ -74,14 +57,9 @@ const FundraiserForm = () => {
             fields: ['title', 'category', 'description', 'targetAmount', 'endDate']
         },
         {
-            title: "Personal Info",
-            icon: UserCircle,
-            fields: ['fullName', 'email', 'phone', 'address']
-        },
-        {
             title: "Bank Details",
             icon: Landmark,
-            fields: ['accountHolder', 'accountNumber', 'bankName', 'upinumber']
+            fields: ['accountHolderName', 'accountNumber', 'bankName', 'upiNumber']
         },
         {
             title: "Documents",
@@ -177,10 +155,11 @@ const FundraiserForm = () => {
     const handleSubmit = (e) => {
         e.preventDefault();
         if (validateStep()) {
-            console.log('Form submitted:', formData);
-            // Handle form submission
+          console.log('Submitting form:', formData);
+          createFundraiser(formData); // Call API function with form data
         }
-    };
+      };
+      
 
     const renderStepContent = () => {
         switch (currentStep) {
@@ -275,72 +254,12 @@ const FundraiserForm = () => {
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <InputField
                             icon={UserCircle}
-                            label="Full Name"
-                            name="fullName"
-                            placeholder="Enter your full name"
-                            value={formData.fullName}
-                            onChange={handleInputChange}
-                            error={errors.fullName}
-                        />
-
-                        <InputField
-                            icon={Mail}
-                            label="Email"
-                            name="email"
-                            type="email"
-                            placeholder="Enter your email"
-                            value={formData.email}
-                            onChange={handleInputChange}
-                            error={errors.email}
-                        />
-
-                        <InputField
-                            icon={Phone}
-                            label="Phone Number"
-                            name="phone"
-                            placeholder="Enter your phone number"
-                            value={formData.phone}
-                            onChange={handleInputChange}
-                            error={errors.phone}
-                        />
-
-                        <div className="col-span-1 md:col-span-2 mb-4">
-                            <label className="block text-sm font-medium text-gray-700 mb-2">
-                                Address
-                            </label>
-                            <textarea
-                                name="address"
-                                value={formData.address}
-                                onChange={handleInputChange}
-                                placeholder="Enter your address"
-                                rows={3}
-                                className={`w-full px-4 py-3 rounded-lg border ${
-                                    errors.address ? 'border-red-500' : 'border-gray-200'
-                                } focus:border-blue-500 focus:ring-2 focus:ring-blue-200`}
-                            />
-                            {errors.address && (
-                                <div className="flex items-center gap-1 mt-1 text-red-500 text-sm">
-                                    <AlertCircle size={14} />
-                                    <span>{errors.address}</span>
-                                </div>
-                            )}
-                        </div>
-
-                        
-                    </div>
-                );
-
-            case 2:
-                return (
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <InputField
-                            icon={UserCircle}
                             label="Account Holder Name"
-                            name="accountHolder"
+                            name="accountHolderName"
                             placeholder="Enter account holder name"
-                            value={formData.accountHolder}
+                            value={formData.accountHolderName}
                             onChange={handleInputChange}
-                            error={errors.accountHolder}
+                            error={errors.accountHolderName}
                         />
 
                         <InputField
@@ -366,16 +285,17 @@ const FundraiserForm = () => {
                         <InputField
                             icon={LucideUpload}
                             label="UPI Number"
-                            name="upinumber"
+                            name="upiNumber"
                             placeholder="Enter UPI Number"
-                            value={formData.upinumber}
+                            value={formData.upiNumber}
                             onChange={handleInputChange}
-                            error={errors.upinumber}
+                            error={errors.upiNumber}
                         />
                     </div>
                 );
+                
 
-            case 3:
+            case 2:
                 return (
                     <div className="space-y-4">
                         <div className="mb-4">

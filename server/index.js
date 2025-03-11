@@ -5,6 +5,7 @@ const bodyParser = require("body-parser");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const colors = require("colors");
+const { v4: uuidv4 } = require('uuid');
 require("dotenv").config();
 
 const app = express();
@@ -25,6 +26,7 @@ mongoose
 
 // User Schema
 const userSchema = new mongoose.Schema({
+  userId: { type: String, unique: true, default: () => `USER-${uuidv4()}` },
   name: { type: String, required: true },
   email: { type: String, required: true, unique: true },
   mobile: { type: String, required: true, unique: true },
@@ -32,25 +34,31 @@ const userSchema = new mongoose.Schema({
   createdAt: { type: Date, default: Date.now },
 });
 
-// Campaign Schema
+// Fundraise Schema
 const FundraiseSchema = new mongoose.Schema({
+  fundId: {type: String, unique: true, default: () => `USER-${uuidv4()}`},
   title: { type: String, required: true },
+  name: {type: String, required: true},
+  email: {type: String, required: true},
+  mobile: {type: String, required: true},
+  category: { type:String, required: true},
   description: { type: String, required: true },
   targetAmount: { type: Number, required: true },
   raisedAmount: { type: Number, default: 0 },
-  creatorId: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
-  bankDetails: {
-    accountHolder: String,
-    accountNumber: String,
-    bankName: String,
-  },
+  enddate: {type: Date, required: true},
+  createdBy: { type: String, required: true, },
+  
+  accountHolderName: {type: String, required: true},
+  bankName: {type: String, required: true},
+  accountNumber: {type: String, required: true},
+  upiNumber: {type: String, required: true},
   documents: [String], // Array of document URLs
   createdAt: { type: Date, default: Date.now },
 });
 
 // Donation Schema
 const donationSchema = new mongoose.Schema({
-  fundraiseId: { type: mongoose.Schema.Types.ObjectId, ref: "Campaign" },
+  fundraiseId: { type: mongoose.Schema.Types.ObjectId, ref: "Fundraise" },
   donorId: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
   amount: { type: Number, required: true },
   donatedAt: { type: Date, default: Date.now },
@@ -95,7 +103,7 @@ app.post("/signup", async (req, res) => {
       message: "User created successfully",
       token,
       user: {
-        id: user._id,
+        id: user.userId,
         name: user.name,
         email: user.email,
         mobile: user.mobile,
@@ -133,7 +141,7 @@ app.post("/login", async (req, res) => {
     res.status(200).json({
       token,
       user: {
-        id: user._id,
+        id: user.userId,
         name: user.name,
         email: user.email,
       },
@@ -144,13 +152,63 @@ app.post("/login", async (req, res) => {
   }
 });
 
-app.post("/fundraie", async (req, res) => {
+
+// POST /fundraise - Create a new fundraiser
+app.post("/fundraise", async (req, res) => {
+  console.log("got in the fundraise function with data ", req.body)
   try {
-    const fund = new Fundraise(req.body);
-    await fund.save();
-    res.status(201).json({ message: "Campaign created successfully" });
+    const {
+      title,
+      category,
+      description,
+      targetAmount,
+      raisedAmount,
+      enddate,
+      accountHolderName,
+      bankName,
+      accountNumber,
+      upiNumber,
+      documents,
+    } = req.body;
+
+    // Get userId from the authenticated user
+    // const user = await User.findById(req.user.userId); // Assuming req.user.userId is the userId of the authenticated user
+    const id = "USER-c77383fc-5f2c-49b3-a705-5e4f4e6210de"
+    const user = await User.findOne({userId: id});
+    if (!user) {
+      console.log(colors.red("User not found"))
+      return res.status(404).json({ error: "User not found" });
+    } 
+
+    console.log(colors.blue("user found"))
+
+    // Create the fundraiser
+    const fundraiser = new Fundraise({
+      fundId: `FUND-${uuidv4()}`,
+      title,
+      category,
+      description,
+      targetAmount,
+      raisedAmount: raisedAmount || 0,
+      enddate,
+      createdBy: user.userId, // Store userId here
+      name: user.name,
+      email: user.email,
+      mobile: user.mobile,
+      accountHolderName,
+      bankName,
+      accountNumber,
+      upiNumber,
+      documents,
+    });
+
+    await fundraiser.save();
+
+    console.log(colors.green("Fund raising successful"))
+    res.status(201).json({ message: "Fundraiser created successfully", fundraiser });
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    console.error("Error creating fundraiser:", error);
+    res.status(500).json({ error: "Internal Server Error" });
   }
 });
 
