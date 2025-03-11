@@ -5,7 +5,9 @@ const bodyParser = require("body-parser");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const colors = require("colors");
+const multer = require("multer");
 const { v4: uuidv4 } = require('uuid');
+const path = require("path");
 require("dotenv").config();
 
 const app = express();
@@ -67,6 +69,26 @@ const donationSchema = new mongoose.Schema({
 const User = mongoose.model("User", userSchema);
 const Fundraise = mongoose.model("Fundraise", FundraiseSchema);
 const Donation = mongoose.model("Donation", donationSchema);
+
+// Configure multer storage
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, "uploads/"); // Save files in the "uploads" folder
+  },
+  filename: (req, file, cb) => {
+    const uniqueSuffix = Date.now() + "-" + uuidv4();
+    cb(null, uniqueSuffix + path.extname(file.originalname)); // Unique filename
+  },
+});
+
+const upload = multer({ storage });
+
+// Ensure 'uploads' directory exists
+const fs = require("fs");
+const uploadDir = path.join(__dirname, "..", "uploads");
+if (!fs.existsSync(uploadDir)) {
+  fs.mkdirSync(uploadDir);
+}
 
 // User registration with password hashing
 app.post("/signup", async (req, res) => {
@@ -153,10 +175,13 @@ app.post("/login", async (req, res) => {
 });
 
 
-// POST /fundraise - Create a new fundraiser
-app.post("/fundraise", async (req, res) => {
-  console.log("got in the fundraise function with data ", req.body)
+// Fundraise Endpoint
+app.post("/fundraise", upload.array("documents", 5), async (req, res) => {
   try {
+    console.log("Request body:", req.body);
+    console.log("Uploaded files:", req.files);
+
+    // Extract data from form fields
     const {
       title,
       category,
@@ -168,21 +193,17 @@ app.post("/fundraise", async (req, res) => {
       bankName,
       accountNumber,
       upiNumber,
-      documents,
     } = req.body;
 
-    // Get userId from the authenticated user
-    // const user = await User.findById(req.user.userId); // Assuming req.user.userId is the userId of the authenticated user
-    const id = "USER-c77383fc-5f2c-49b3-a705-5e4f4e6210de"
-    const user = await User.findOne({userId: id});
-    if (!user) {
-      console.log(colors.red("User not found"))
-      return res.status(404).json({ error: "User not found" });
-    } 
+    // Simulate getting the logged-in user (replace this with actual user logic)
+    const id = "USER-c77383fc-5f2c-49b3-a705-5e4f4e6210de";
+    const user = await User.findOne({ userId: id });
+    if (!user) return res.status(404).json({ error: "User not found" });
 
-    console.log(colors.blue("user found"))
+    // Get uploaded document URLs
+    const documents = req.files.map((file) => `/uploads/${file.filename}`);
 
-    // Create the fundraiser
+    // Create a new fundraiser
     const fundraiser = new Fundraise({
       fundId: `FUND-${uuidv4()}`,
       title,
@@ -195,17 +216,20 @@ app.post("/fundraise", async (req, res) => {
       name: user.name,
       email: user.email,
       mobile: user.mobile,
-      accountHolderName,
-      bankName,
-      accountNumber,
-      upiNumber,
+      bankDetails: {
+        accountHolderName,
+        bankName,
+        accountNumber,
+        upiNumber,
+      },
       documents,
     });
 
     await fundraiser.save();
-
-    console.log(colors.green("Fund raising successful"))
-    res.status(201).json({ message: "Fundraiser created successfully", fundraiser });
+    res.status(201).json({
+      message: "Fundraiser created successfully",
+      fundraiser,
+    });
   } catch (error) {
     console.error("Error creating fundraiser:", error);
     res.status(500).json({ error: "Internal Server Error" });
