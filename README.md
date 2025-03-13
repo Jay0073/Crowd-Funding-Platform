@@ -63,25 +63,21 @@ This project is a platform that enables users to create and support crowdfunding
 
      ```bash
      cd server
-     npm run dev
+     node index.js
      ```
 
    - **Frontend**:
 
      ```bash
      cd ../client
-     npm start
+     npm run dev
      ```
 
 7. **Access the application**:
 
-   Open your browser and navigate to `http://localhost:3000` to view the application.
+   Open your browser and navigate to `http://localhost:5173` to view the application.
 
 ## Contributing
 
 Contributions are welcome! Please fork the repository and create a pull request with your changes.
-
-## License
-
-This project is licensed under the MIT License.
 
