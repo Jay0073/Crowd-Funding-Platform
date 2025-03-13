@@ -24,3 +24,64 @@ This project is a platform that enables users to create and support crowdfunding
 
    ```bash
    git clone https://github.com/Jay0073/Crowd-Funding-Website.git
+   ```
+
+2. **Navigate to the project directory**:
+
+   ```bash
+   cd Crowd-Funding-Website
+   ```
+
+3. **Install server dependencies**:
+
+   ```bash
+   cd server
+   npm install
+   ```
+
+4. **Install client dependencies**:
+
+   ```bash
+   cd ../client
+   npm install
+   ```
+
+5. **Set up environment variables**:
+
+   - Create a `.env` file in the `server` directory with the following variables:
+
+     ```env
+     PORT=5000
+     MONGODB_URI=your_mongodb_connection_string
+     JWT_SECRET=your_jwt_secret
+     STRIPE_SECRET_KEY=your_stripe_secret_key
+     ```
+
+6. **Start the development servers**:
+
+   - **Backend**:
+
+     ```bash
+     cd server
+     npm run dev
+     ```
+
+   - **Frontend**:
+
+     ```bash
+     cd ../client
+     npm start
+     ```
+
+7. **Access the application**:
+
+   Open your browser and navigate to `http://localhost:3000` to view the application.
+
+## Contributing
+
+Contributions are welcome! Please fork the repository and create a pull request with your changes.
+
+## License
+
+This project is licensed under the MIT License.
+
