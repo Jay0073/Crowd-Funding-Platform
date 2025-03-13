@@ -253,8 +253,8 @@ const FundraiserPage = () => {
             </div>
 
             {/* Tabs Navigation */}
-            <div className="border-b">
-              <div className="flex gap-8">
+            <div className="border-b ">
+              <div className="flex gap-8 ">
                 {["About", "Documents", "Comments"].map((tab, index) => (
                   <button
                     key={tab}
@@ -262,7 +262,7 @@ const FundraiserPage = () => {
                     className={`py-4 px-2 relative ${
                       activeTab === index
                         ? "text-blue-600 font-medium"
-                        : "text-gray-600"
+                        : "text-gray-600 cursor-pointer"
                     }`}
                   >
                     {tab}
@@ -320,7 +320,7 @@ const FundraiserPage = () => {
               <div className="mb-6">
                 <div className="flex justify-between mb-2">
                   <span className="text-2xl font-bold text-gray-900">
-                    ${fundraiser.raisedAmount}
+                    ${fundraiser.raisedAmount} <span className="text-[15px] ml-[-5] font-medium">raised</span>
                   </span>
                   <span className="text-gray-800">
                     of <span className="text-2xl font-bold">${fundraiser.targetAmount}</span>
@@ -339,7 +339,7 @@ const FundraiserPage = () => {
               </div>
 
               {/* Contribute Button */}
-              <button className="w-full py-4 bg-blue-600 text-white rounded-xl font-medium mb-4 hover:bg-blue-700 transition-colors"
+              <button className="w-full py-4 bg-blue-600 cursor-pointer text-white rounded-xl font-medium mb-4 hover:bg-blue-700 transition-colors"
               onClick={() => setShowPaymentPopup(true)}>
                 Contribute Now
               </button>
@@ -348,7 +348,7 @@ const FundraiserPage = () => {
               <div className="relative">
                 <button
                   onClick={() => setIsShareMenuOpen(!isShareMenuOpen)}
-                  className="w-full py-4 border border-gray-200 rounded-xl font-medium text-gray-700 hover:bg-gray-50 transition-colors mb-4"
+                  className="w-full py-4 border cursor-pointer border-gray-200 rounded-xl font-medium text-gray-700 hover:bg-gray-50 transition-colors mb-4"
                 >
                   Share this fundraiser
                 </button>
@@ -387,13 +387,13 @@ const FundraiserPage = () => {
               {/* Payment Options */}
               <div className="mb-6">
                 <h4 className="font-medium text-gray-900 mb-3">
-                  Payment Options
+                  Payment Options Available
                 </h4>
                 <div className="grid grid-cols-3 gap-2">
                   {["Visa", "Mastercard", "PayPal"].map((option) => (
                     <div
                       key={option}
-                      className="bg-gray-50 p-2 rounded text-center text-sm"
+                      className="bg-blue-200 p-2 rounded-3xl text-center text-sm"
                     >
                       {option}
                     </div>
@@ -426,14 +426,14 @@ const FundraiserPage = () => {
                           </p>
                         </div>
                         <span className="font-medium text-blue-600">
-                          ${supporter.amount}
+                          ${supporter.amount} 
                         </span>
                       </div>
                     ))}
                 </div>
                 <button
                   onClick={() => setShowAllSupporters(!showAllSupporters)}
-                  className="text-blue-600 text-sm mt-4 hover:underline"
+                  className="text-blue-600 text-sm mt-4 cursor-pointer hover:underline"
                 >
                   {showAllSupporters ? "Show Less" : "See All Supporters"}
                 </button>
