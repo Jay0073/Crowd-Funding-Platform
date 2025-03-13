@@ -51,11 +51,11 @@ const FundraiserCard = ({
       <div className="p-6 space-y-4">
         {/* Title and Fundraiser Info */}
         <div>
-          <NavLink to={`/donate/${fundId}`} className="text-xl font-semibold text-gray-900 line-clamp-2 hover:text-blue-600 transition-colors duration-200">
+          <NavLink to={`/donate/${fundId}`} className="cursor-pointer text-xl font-semibold text-gray-900 line-clamp-2 hover:text-blue-600 transition-colors duration-200">
             {title}
           </NavLink>
           <div className="flex justify-between items-center">
-            <p className="text-gray-600 text-sm">
+            <p className="text-gray-600 font-semibold text-sm">
               from <span className="font-medium text-gray-900">{name}</span>
             </p>
             <p className="outline rounded-2xl justify-self-center px-2 text-sm text-blue-600">
@@ -71,7 +71,7 @@ const FundraiserCard = ({
         <div className="flex gap-3 pt-2">
           <button
             onClick={() => handleShare(id)}
-            className="flex-1 flex items-center justify-center gap-2 px-4 py-3 rounded-full border-2 border-gray-200 text-gray-700 font-medium transition-all duration-200 hover:border-blue-600 hover:text-blue-600 hover:scale-105 active:scale-100"
+            className="cursor-pointer flex-1 flex items-center justify-center gap-2 px-4 py-3 rounded-full border-2 border-gray-200 text-gray-700 font-medium transition-all duration-200 hover:border-blue-600 hover:text-blue-600 hover:scale-105 active:scale-100"
           >
             <Share2 size={18} />
             <span>Share</span>

@@ -5,7 +5,7 @@ import AuthPopup from "./AuthPopup";
 const NavLink = ({ href, children }) => (
   <a
     href={href}
-    className="text-gray-700 hover:text-blue-600 hover:bg-[#ffe136] px-3 py-2 text-[15px] font-medium transition-all duration-100 hover:scale-105"
+    className="text-gray-700 hover:text-blue-600  px-3 py-2 text-[15px] font-medium transition-all duration-100 hover:scale-105"
   >
     {children}
   </a>
@@ -21,7 +21,7 @@ const Button = ({ variant = "default", children, className = "", onClick, ...pro
   return (
     <button
       onClick={onClick}
-      className={`px-6 py-2.5 rounded-full font-semibold text-[15px] transition-all duration-200 transform hover:scale-105 active:scale-100 ${variants[variant]} ${className}`}
+      className={`cursor-pointer px-6 py-2.5 rounded-full font-semibold text-[15px] transition-all duration-200 transform hover:scale-105 active:scale-100 ${variants[variant]} ${className}`}
       {...props}
     >
       {children}
@@ -157,14 +157,13 @@ const Navbar = () => {
             >
               About Us
             </a>
-            <div className="px-4 py-2.5 space-y-2">
-              <Button variant="outline" onClick={() => setShowAuthPopup(true)}>
-                Login
-              </Button>
-
-              <Button variant="primary" className="w-full">
+            <div className="px-4 py-2.5 space-y-2 flex items-baseline gap-1">
+            <Button variant="primary" className="w-full h-[48px]">
                 Start Fundraising
               </Button>
+              <Button variant="outline" onClick={() => setShowAuthPopup(true)}>
+                Login
+              </Button>              
             </div>
           </div>
         </div>

@@ -52,7 +52,7 @@ const Features = () => {
     <div className="pt-0 pb-12 bg-gray-50">
       {/* Section Header */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center max-w-3xl mx-auto mb-20">
+        <div className="text-center max-w-3xl mx-auto mb-0">
           <div className="inline-flex items-center px-4 py-2 gap-2 rounded-full bg-blue-100 text-blue-600 mb-6">
             <Heart size={48} className="mr-2" />
             <span className="font-semibold text-5xl">Why Choose Us</span>

@@ -16,7 +16,7 @@ const ProgressBar = ({current, goal}) => {
           <span className="font-medium text-blue-600">
             ${current}
           </span>
-          <span className="text-gray-500">
+          <span className="text-gray-900 text-[15px] font-semibold">
             raised of ${goal}
           </span>
         </div>

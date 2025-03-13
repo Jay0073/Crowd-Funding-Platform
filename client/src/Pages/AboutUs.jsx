@@ -9,6 +9,9 @@ import {
 } from 'lucide-react';
 import heroimg from '../assets/hero_img.png';
 import donateimg from '../assets/donate.jpg';
+import teammember1 from '../assets/teammember1.jpeg'
+import teammember2 from '../assets/teammember2.jpeg'
+import teammember3 from '../assets/teammember3.jpeg'
 // Import your Features component
 import Features from '../Components/Features';
 import Testimonials from '../Components/Testimonials';
@@ -78,16 +81,16 @@ const Team = () => (
     </p>
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
       {[
-        { name: "Emma Wilson", role: "CEO & Founder" },
-        { name: "Michael Chen", role: "Head of Operations" },
-        { name: "Sarah Johnson", role: "Community Director" }
+        { name: "Emma Wilson", role: "CEO & Founder", teammember: teammember1 },
+        { name: "Michael Chen", role: "Head of Operations", teammember: teammember2 },
+        { name: "Sarah Johnson", role: "Community Director", teammember: teammember3 }
       ].map((member, index) => (
         <div key={index} className="bg-white rounded-xl shadow-lg p-6">
           {/* Replace with your team member images */}
           <img 
-            src="https://placehold.co/200x200" 
+            src={member.teammember} 
             alt={member.name}
-            className="w-32 h-32 rounded-full mx-auto mb-4"
+            className="w-32 h-32 object-cover rounded-full mx-auto mb-4"
           />
           <h3 className="text-xl font-semibold text-gray-900">{member.name}</h3>
           <p className="text-gray-600">{member.role}</p>

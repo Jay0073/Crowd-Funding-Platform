@@ -1,5 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { ChevronLeft, ChevronRight, Quote } from 'lucide-react';
+import img1 from '../assets/testimonyImg1.jpeg';
+import img2 from '../assets/testimonyImg2.jpeg';
+import img3 from '../assets/testimonyImg3.jpeg';
+
 
 const TestimonialCard = ({ data }) => (
   <div className="bg-white rounded-xl shadow-lg overflow-hidden max-w-4xl mx-auto">
@@ -62,31 +66,31 @@ const Testimonials = () => {
 
   const testimonials = [
     {
-      name: "Sarah Anderson",
-      location: "New York, USA",
+      name: "Sarah Khan",
+      location: "New Delhi, India",
       causeType: "Medical Emergency",
-      image: "https://placehold.co/400x300",
+      image: img2,
       testimonial: "When my daughter needed urgent medical treatment, I didn't know where to turn. Starting a fundraiser on this platform changed everything. The support from the community was overwhelming, and the platform made it incredibly easy to reach out to potential donors. Within weeks, we raised enough for her treatment.",
-      amountRaised: 45000,
+      amountRaised: 450,
       supporters: 384
     },
     {
-      name: "Michael Chen",
-      location: "Toronto, Canada",
+      name: "Ram Chandra",
+      location: "Chennai, TamilNadu",
       causeType: "Education",
-      image: "https://placehold.co/400x300",
+      image: img1,
       testimonial: "As an educator, I dreamed of providing underprivileged students with access to technology. Through this platform, we not only raised funds but built a community of supporters who shared our vision. The social sharing tools helped us reach donors worldwide.",
-      amountRaised: 75000,
+      amountRaised: 7500,
       supporters: 629
     },
     {
-      name: "Emma Wilson",
-      location: "London, UK",
+      name: "Ali Bada",
+      location: "Ahmedabad, Gujarat",
       causeType: "Animal Shelter",
-      image: "https://placehold.co/400x300",
+      image: img3,
       testimonial: "Running an animal shelter during the pandemic was challenging. This platform became our lifeline. The intuitive interface made it simple to share our story and updates about the animals. The zero platform fee meant every donation counted more.",
-      amountRaised: 62000,
-      supporters: 847
+      amountRaised: 620,
+      supporters: 289
     }
   ];
 
