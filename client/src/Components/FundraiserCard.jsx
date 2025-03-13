@@ -3,42 +3,15 @@ import { Share2, Heart } from "lucide-react";
 import { NavLink } from "react-router-dom";
 import ProgressBar from "./ProgressBar";
 
-class ErrorBoundary extends Component {
-  constructor(props) {
-    super(props);
-    this.state = { hasError: false };
-  }
-
-  static getDerivedStateFromError(error) {
-    // Update state so the next render will show the fallback UI.
-    return { hasError: true };
-  }
-
-  componentDidCatch(error, errorInfo) {
-    // You can log the error to an error reporting service
-    console.error("Caught an error:", error, errorInfo);
-  }
-
-  render() {
-    if (this.state.hasError) {
-      // You can render any custom fallback UI
-      return <h1>Something went wrong.</h1>;
-    }
-
-    return this.props.children;
-  }
-}
-
-
 const FundraiserCard = ({
   fundId,
-  documents,
   category,
   title,
   name,
   raisedAmount,
   targetAmount,
   endDate,
+  documents,
 }) => {
   // Format date
   const formattedDate = new Date(endDate).toLocaleDateString("en-US", {
@@ -46,6 +19,9 @@ const FundraiserCard = ({
     month: "long",
     day: "numeric",
   });
+
+  // const images = documents.map(item => images.append(item))
+  console.log(documents)
 
   const handleDonate = (fundId) => {
     console.log("donate is clicked and id is", id);
@@ -60,7 +36,7 @@ const FundraiserCard = ({
       {/* Image Container */}
       <div className="relative h-58 overflow-hidden">
         <img
-          src={`http://localhost:5000${documents}`}
+          src={documents?.[0] || "/placeholder.jpg"}
           alt={title}
           className="w-full h-full object-cover transform hover:scale-110 transition-transform duration-500"
         />
@@ -78,16 +54,18 @@ const FundraiserCard = ({
           <h3 className="text-xl font-semibold text-gray-900 line-clamp-2 hover:text-blue-600 transition-colors duration-200">
             {title}
           </h3>
-          <p className="text-gray-600 text-sm">
-            by{" "}
-            <span className="font-medium text-gray-900">{name}</span>
-          </p>
+          <div className="flex justify-between items-center">
+            <p className="text-gray-600 text-sm">
+              by <span className="font-medium text-gray-900">{name}</span>
+            </p>
+            <button className="border-[1px] p-1 rounded-2xl text-[13px] border-blue-600 text-blue-600 hover:bg-blue-50">
+              {category}
+            </button>
+          </div>
         </div>
 
-
-          {/* Progress Section */}
-          <ProgressBar current={raisedAmount} goal={targetAmount} />
-    
+        {/* Progress Section */}
+        <ProgressBar current={raisedAmount} goal={targetAmount} />
 
         {/* Action Buttons */}
         <div className="flex gap-3 pt-2">
@@ -111,33 +89,5 @@ const FundraiserCard = ({
     </div>
   );
 };
-
-// Example usage with dummy data
-// const CampaignCard = () => {
-//   const handleShare = () => {
-//     console.log("Share clicked");
-//   };
-
-//   const handleDonate = () => {
-//     console.log("Donate clicked");
-//   };
-
-//   return (
-//     <div className="p-8 bg-gray-50 min-h-screen">
-//       <div className="max-w-sm mx-auto">
-//         <FundraiserCard
-//           imageUrl="https://placehold.co/600x400"
-//           title="Help Save the Local Animal Shelter"
-//           fundraiserName="John Doe"
-//           currentAmount={25000}
-//           goalAmount={50000}
-//           endDate="2024-04-15"
-//           onShare={handleShare}
-//           onDonate={handleDonate}
-//         />
-//       </div>
-//     </div>
-//   );
-// };
 
 export default FundraiserCard;

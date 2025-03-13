@@ -89,6 +89,22 @@ if (!fs.existsSync(uploadDir)) {
   fs.mkdirSync(uploadDir);
 }
 
+app.use("/uploads", express.static("uploads"));
+
+app.post("/upload", upload.array("documents", 5), (req, res) => {
+  try {
+    const fileUrls = req.files.map(file => `http://localhost:5000/uploads/${file.filename}`);
+    console.log(fileUrls)
+    res.json({
+      success: 1,
+      fileUrls,
+    });
+  } catch (error) {
+    console.error("Upload error:", error);
+    res.status(500).json({ success: 0, message: "Image upload failed" });
+  }
+});
+
 // User registration with password hashing
 app.post("/signup", async (req, res) => {
   console.log(colors.yellow("signing the user"));
@@ -178,7 +194,8 @@ app.post("/login", async (req, res) => {
 app.post("/fundraise", upload.array("documents", 5), async (req, res) => {
   try {
     console.log("Request body:", req.body);
-    console.log("Uploaded files:", req.files);
+    const { documents } = req.body;
+    console.log("uploaded images", documents)
 
     // Extract data from form fields
     const {
@@ -198,9 +215,6 @@ app.post("/fundraise", upload.array("documents", 5), async (req, res) => {
     const id = "USER-c77383fc-5f2c-49b3-a705-5e4f4e6210de";
     const user = await User.findOne({ userId: id });
     if (!user) return res.status(404).json({ error: "User not found" });
-
-    // Get uploaded document URLs
-    const documents = req.files.map((file) => `/uploads/${file.filename}`);
 
     // Create a new fundraiser
     const fundraiser = new Fundraise({

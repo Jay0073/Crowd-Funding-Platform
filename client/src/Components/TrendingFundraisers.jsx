@@ -55,6 +55,7 @@ const TrendingFundraisers = () => {
     setTimeout(() => setIsAnimating(false), 700);
   };
 
+
   return (
     <div className="pt-0 pb-18 bg-gradient-to-b from-yellow-100 to-white">
       <div className="text-center mb-16">

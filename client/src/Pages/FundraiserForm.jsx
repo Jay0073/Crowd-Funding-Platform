@@ -15,7 +15,7 @@ import {
   LucideUpload,
 } from "lucide-react";
 import InputField from "../Components/InputField.jsx";
-import axios from 'axios';
+import axios from "axios";
 
 const FundraiserForm = () => {
   const [currentStep, setCurrentStep] = useState(0);
@@ -99,28 +99,28 @@ const FundraiserForm = () => {
   const handleFileUpload = (e) => {
     const uploadedFiles = Array.from(e.target.files);
     const maxSize = 5 * 1024 * 1024; // 5MB
-    const validTypes = ['image/jpeg', 'image/png', 'application/pdf'];
+    const validTypes = ["image/jpeg", "image/png", "application/pdf"];
 
-    const validFiles = uploadedFiles.filter(file => {
+    const validFiles = uploadedFiles.filter((file) => {
       if (file.size > maxSize) {
-        setErrors(prev => ({
+        setErrors((prev) => ({
           ...prev,
-          files: `${file.name} is too large. Maximum size is 5MB`
+          files: `${file.name} is too large. Maximum size is 5MB`,
         }));
         return false;
       }
       if (!validTypes.includes(file.type)) {
-        setErrors(prev => ({
+        setErrors((prev) => ({
           ...prev,
-          files: `${file.name} is not a valid file type. Please upload images or PDFs`
+          files: `${file.name} is not a valid file type. Please upload images or PDFs`,
         }));
         return false;
       }
       return true;
     });
 
-    setFiles(prev => [...prev, ...validFiles]);
-    setFormData(prev => ({
+    setFiles((prev) => [...prev, ...validFiles]);
+    setFormData((prev) => ({
       ...prev,
       documents: [...prev.documents, ...validFiles],
     }));
@@ -176,49 +176,75 @@ const FundraiserForm = () => {
     return Object.keys(newErrors).length === 0;
   };
 
+  // Helper function to upload images and return their URLs
+  const uploadImages = async (files) => {
+    try {
+      const formData = new FormData();
+      files.forEach((file) => formData.append("documents", file)); // Append all images
+  
+      // Upload images to backend
+      const response = await axios.post(
+        "http://localhost:5000/upload",
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data", // Correct content-type for file uploads
+          },
+        }
+      );
+  
+      if (response.status !== 200) throw new Error("Image upload failed");
+  
+      return response.data.fileUrls; // Return list of image URLs
+    } catch (error) {
+      console.error("Image upload error:", error);
+      throw error;
+    }
+  };
+  
 
   const createFundraiser = async () => {
-  setIsSubmitting(true);
-  setSubmitError(null);
+    setIsSubmitting(true);
+    setSubmitError(null);
 
-  try {
-    const formDataToSend = new FormData();
+    try {
+      const imageUrls = await uploadImages(formData.documents);
 
-    Object.entries(formData).forEach(([key, value]) => {
+      const formDataToSend = new FormData();
+      Object.entries(formData).forEach(([key, value]) => {
         if (key === "documents") {
-          value.forEach((file) => formDataToSend.append("documents", file));
+          imageUrls.forEach((url) => formDataToSend.append("documents", url));
         } else if (typeof value === "object") {
-          // Stringify nested objects (like bankDetails)
           formDataToSend.append(key, JSON.stringify(value));
         } else {
           formDataToSend.append(key, value);
         }
       });
 
-    const response = await axios.post("http://localhost:5000/fundraise", formDataToSend, {
-      headers: {
-        "Content-Type": "multipart/form-data",
-        // Authorization: `Bearer ${localStorage.getItem("token")}`, // Assuming you're using JWT
-      },
-    });
+      // 3. Submit fundraiser
+      const response = await axios.post(
+        "http://localhost:5000/fundraise",
+        formDataToSend,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
 
-    if (response.status === 201) {
-      console.log("Fundraiser created successfully:", response.data);
-      alert("Fundraiser created successfully!");
-      window.location.href = "/";
-    }
-  } catch (error) {
-    console.error("Error creating fundraiser:", error.response?.data || error.message);
-    setSubmitError(error.response?.data?.error || "An error occurred");
-  } finally {
-    setIsSubmitting(false);
-  }
-};
-
-  const handleNext = () => {
-    console.log(currentStep)
-    if (validateStep()) {
-      setCurrentStep((prev) => Math.min(prev + 1, steps.length - 1));
+      if (response.status === 201) {
+        console.log("Fundraiser created successfully:", response.data);
+        alert("Fundraiser created successfully!");
+        window.location.href = "/";
+      }
+    } catch (error) {
+      console.error(
+        "Error creating fundraiser:",
+        error.response?.data || error.message
+      );
+      setSubmitError(error.response?.data?.error || "An error occurred");
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -228,11 +254,13 @@ const FundraiserForm = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (currentStep === 0 || currentStep === 1) {
-        validateStep()
-    }
-    if (currentStep === 2){
-        await createFundraiser();
+    if (currentStep < steps.length - 1) {
+      validateStep();
+      if (Object.keys(errors).length === 0) {
+        setCurrentStep((prev) => Math.min(prev + 1, steps.length - 1));
+      }
+    } else {
+      await createFundraiser();
     }
   };
 
@@ -431,7 +459,7 @@ const FundraiserForm = () => {
   return (
     <div className="min-h-screen bg-gray-50 pt-16 pb-8">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-      {submitSuccess && (
+        {submitSuccess && (
           <div className="mb-4 p-4 bg-green-100 text-green-700 rounded-lg flex items-center">
             <Check className="mr-2" />
             Fundraiser created successfully!
@@ -515,15 +543,11 @@ const FundraiserForm = () => {
                   Back
                 </button>
                 <button
-                  type={currentStep === steps.length - 1 ? "submit" : "button"}
-                  onClick={
-                    currentStep === steps.length - 1 ? undefined : handleNext
-                  }
+                  type="submit"
                   className="flex items-center gap-2 px-6 py-3 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700 transition-colors"
                 >
                   {currentStep === steps.length - 1 ? "Submit" : "Next"}
                   <ChevronRight size={20} />
-                  
                 </button>
               </div>
             </form>

@@ -110,14 +110,27 @@ const TabPanel = ({ children, value, index }) => (
   </div>
 );
 
+
 const FundraiserPage = () => {
   const [activeTab, setActiveTab] = useState(0);
   const [showAllSupporters, setShowAllSupporters] = useState(false);
   const [isShareMenuOpen, setIsShareMenuOpen] = useState(false);
+  const [fundraiser, setFundraiser] = useState([]);
 
+  useEffect(() => {
+    const fetchFundraisers = async () => {
+      try {
+        const response = await axios.get("http://localhost:5000/fetchfundraises");
+        setFundraiser(response.data);
+      } catch (error) {
+        console.error("Error fetching fundraisers:", error);
+      }
+    };
+    fetchFundraisers();
+  }, []);
 
   // Sample data
-  const fundraiser = {
+  const fundrr = {
     imageUrl: donate2,
     fundraiserName: "John Doe",
     title: "Help Save City Animal Shelter",
@@ -161,6 +174,8 @@ const FundraiserPage = () => {
       // Add more comments...
     ],
   };
+
+  const mainimg = document[0]
 
   const formattedDate = new Date(fundraiser.endDate).toLocaleDateString(
     "en-US",
@@ -227,7 +242,7 @@ const FundraiserPage = () => {
             {/* Main Image */}
             <div className="mb-8">
               <img
-                src={fundraiser.imageUrl}
+                src={mainimg}
                 alt={fundraiser.title}
                 className="w-full h-[400px] object-cover rounded-xl"
               />
@@ -259,8 +274,10 @@ const FundraiserPage = () => {
             <TabPanel value={activeTab} index={0}>
               <div className="prose max-w-none">
                 <h2 className="text-2xl font-semibold text-gray-900 mb-4">
-                  Hi, I am {fundraiser.fundraiserName}
+                  Hi, I am {fundraiser.name}
                 </h2>
+                <h3 className="text-xl font-semibold text-gray-900 mb-4">{fundraiser.email}</h3>
+                <h3 className="text-xl font-semibold text-gray-900 mb-4">{fundraiser.mobile}</h3>
                 <p className="text-gray-600 leading-relaxed">
                   {fundraiser.description}
                 </p>
@@ -268,7 +285,9 @@ const FundraiserPage = () => {
             </TabPanel>
 
             <TabPanel value={activeTab} index={1}>
+              
               <ImageCarousel images={fundraiser.documents} />
+             
             </TabPanel>
 
             <TabPanel value={activeTab} index={2}>
