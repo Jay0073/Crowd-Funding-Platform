@@ -274,6 +274,29 @@ app.get("/fetchfundraises", async (req, res) => {
   }
 });
 
+// Get trending fundraisers
+app.get("/fetchtrendingfundraises", async (req, res) => {
+  try {
+    const fundraisers = await Fundraise.find({}).sort({ createdAt: -1 }).limit(5);
+    res.status(200).json(fundraisers);
+  } catch (error) {
+    console.error("Error fetching fundraisers:", error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+});
+
+// Get all fundraisers
+app.get("/fetchfundraise/:fundId", async (req, res) => {
+  const fundId = req.params;
+  try {
+    const fundraisers = await Fundraise.findOne({fundId: fundId.fundId})
+    res.status(200).json(fundraisers);
+  } catch (error) {
+    console.error("Error fetching fundraisers:", error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+});
+
 app.get("/", (req, res) => {
     res.send("hello world")
 })

@@ -12,7 +12,7 @@ const TrendingFundraisers = () => {
   useEffect(() => {
     const fetchFundraisers = async () => {
       try {
-        const response = await axios.get("http://localhost:5000/fetchfundraises");
+        const response = await axios.get("http://localhost:5000/fetchtrendingfundraises");
         setFundraisers(response.data);
       } catch (error) {
         console.error("Error fetching fundraisers:", error);

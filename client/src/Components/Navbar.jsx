@@ -5,7 +5,7 @@ import AuthPopup from "./AuthPopup";
 const NavLink = ({ href, children }) => (
   <a
     href={href}
-    className="text-gray-700 hover:text-blue-600 px-5 py-2 text-[15px] font-medium transition-all duration-200 hover:scale-105"
+    className="text-gray-700 hover:text-blue-600 hover:bg-[#ffe136] px-3 py-2 text-[15px] font-medium transition-all duration-100 hover:scale-105"
   >
     {children}
   </a>
@@ -112,7 +112,7 @@ const Navbar = () => {
                 onClick={() => setShowAuthPopup(true)}>
                   Login
               </Button>
-              <Button variant="primary" style={{color:'white'}}><NavLink href='/fundraisingform' >Start Fundraising</NavLink></Button>
+              <Button variant="primary" className="px-3 py-3 text-[15px] font-medium transition-all duration-100 text-white"><a className="text-white hover:scale-105" href='/fundraisingform' >Start Fundraising</a></Button>
             </div>
           </div>
           {showAuthPopup && (

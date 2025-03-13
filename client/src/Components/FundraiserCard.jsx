@@ -24,7 +24,7 @@ const FundraiserCard = ({
   console.log(documents)
 
   const handleDonate = (fundId) => {
-    console.log("donate is clicked and id is", id);
+    console.log("donate is clicked and id is", fundId);
   };
 
   const handleShare = () => {
@@ -50,17 +50,17 @@ const FundraiserCard = ({
       {/* Content Container */}
       <div className="p-6 space-y-4">
         {/* Title and Fundraiser Info */}
-        <div className="space-y-2">
-          <h3 className="text-xl font-semibold text-gray-900 line-clamp-2 hover:text-blue-600 transition-colors duration-200">
+        <div>
+          <NavLink to={`/donate/${fundId}`} className="text-xl font-semibold text-gray-900 line-clamp-2 hover:text-blue-600 transition-colors duration-200">
             {title}
-          </h3>
+          </NavLink>
           <div className="flex justify-between items-center">
             <p className="text-gray-600 text-sm">
-              by <span className="font-medium text-gray-900">{name}</span>
+              from <span className="font-medium text-gray-900">{name}</span>
             </p>
-            <button className="border-[1px] p-1 rounded-2xl text-[13px] border-blue-600 text-blue-600 hover:bg-blue-50">
+            <p className="outline rounded-2xl justify-self-center px-2 text-sm text-blue-600">
               {category}
-            </button>
+            </p>
           </div>
         </div>
 

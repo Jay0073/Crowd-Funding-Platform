@@ -15,8 +15,8 @@ const StepCard = ({ number, icon: Icon, title, description }) => (
     </div>
     
     {/* Step Content */}
-    <div className="flex-1 pb-8">
-      <div className="flex gap-3 items-center p-3 rounded-xl bg-blue-50 text-blue-600 group-hover:bg-blue-100 transition-all duration-300">
+    <div className="flex-1 pb-8 hover:bg-blue-200 rounded-2xl">
+      <div className="flex gap-3 items-center p-3 rounded-xl text-blue-600  transition-all duration-300">
         <Icon size={28} />
       <h3 className="text-[20px] font-semibold text-gray-900">{title}</h3>
       </div>
@@ -47,9 +47,9 @@ const FundraiserSteps = () => {
   return (
     <div className="pt-4 pb-12 bg-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center mb-16">
+        <div className="text-center mb-8">
           <h2 className="text-5xl font-semibold text-gray-900">
-            Start a Fundraiser in 
+            Start a Fundraising in 
             <span className="text-blue-600"> Three Simple Steps</span>
           </h2>
         </div>
@@ -68,7 +68,7 @@ const FundraiserSteps = () => {
             {/* CTA Button */}
             <div className="mt-8">
               <a href="/fundraisingform">
-              <button className="inline-flex text-[20px] items-center px-6 py-3 rounded-full bg-blue-600 text-white font-medium transition-all duration-200 hover:bg-blue-700 ml-10">
+              <button className="inline-flex text-[20px] items-center px-6 py-3 rounded-full bg-blue-600 text-white font-medium transition-all duration-200 hover:bg-blue-700 hover:scale-103 ml-10">
                 Start Fundraising Now
                 <ArrowRight className="ml-2" size={28} />
               </button>
@@ -78,7 +78,7 @@ const FundraiserSteps = () => {
 
           {/* Video Section */}
           <div className="relative rounded-xl overflow-hidden shadow-lg max-w-sm mx-auto lg:mx-0">
-            <div className="relative" style={{ width: '384px', height: '680px' }}> 
+            <div className="relative" style={{ width: '394px', height: '592px' }}> 
               <video
                 className="absolute inset-0 w-full h-full object-contain"
                 autoPlay

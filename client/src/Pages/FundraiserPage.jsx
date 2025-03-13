@@ -14,8 +14,10 @@ import {
   Copy,
   UserCircleIcon,
 } from "lucide-react";
+import axios from "axios";
 import ContributionPopup from "../Components/ContributionPopup";
 import donate2 from "../assets/donate2.jpeg";
+import { useParams } from "react-router-dom";
 
 const SocialShareButton = ({ icon: Icon, color, label, onClick }) => (
   <button
@@ -40,7 +42,7 @@ const ProgressBar = ({ current, goal }) => {
   );
 };
 
-const ImageCarousel = ({ images }) => {
+const ImageCarousel = ({ images = [] }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [selectedImage, setSelectedImage] = useState(null);
 
@@ -117,17 +119,20 @@ const FundraiserPage = () => {
   const [isShareMenuOpen, setIsShareMenuOpen] = useState(false);
   const [fundraiser, setFundraiser] = useState([]);
 
+  const { id: fundId } = useParams();
+
   useEffect(() => {
-    const fetchFundraisers = async () => {
+    const fetchFundraiser = async () => {
       try {
-        const response = await axios.get("http://localhost:5000/fetchfundraises");
+        const response = await axios.get(`http://localhost:5000/fetchfundraise/${fundId}`);
         setFundraiser(response.data);
+        console.log("response ", response.data)
       } catch (error) {
-        console.error("Error fetching fundraisers:", error);
+        console.error("Error fetching fundraiser:", error);
       }
     };
-    fetchFundraisers();
-  }, []);
+    fetchFundraiser();
+  }, [fundId]);
 
   // Sample data
   const fundrr = {
@@ -175,7 +180,6 @@ const FundraiserPage = () => {
     ],
   };
 
-  const mainimg = document[0]
 
   const formattedDate = new Date(fundraiser.endDate).toLocaleDateString(
     "en-US",
@@ -242,7 +246,7 @@ const FundraiserPage = () => {
             {/* Main Image */}
             <div className="mb-8">
               <img
-                src={mainimg}
+                src={fundraiser.documents?.[0] || "/placeholder.jpg"}
                 alt={fundraiser.title}
                 className="w-full h-[400px] object-cover rounded-xl"
               />
@@ -273,11 +277,12 @@ const FundraiserPage = () => {
             {/* Tab Panels */}
             <TabPanel value={activeTab} index={0}>
               <div className="prose max-w-none">
-                <h2 className="text-2xl font-semibold text-gray-900 mb-4">
+                <h2 className="text-2xl font-semibold text-gray-900 mb-1">
                   Hi, I am {fundraiser.name}
                 </h2>
-                <h3 className="text-xl font-semibold text-gray-900 mb-4">{fundraiser.email}</h3>
-                <h3 className="text-xl font-semibold text-gray-900 mb-4">{fundraiser.mobile}</h3>
+
+                <h3 className="text-[15px] font-semibold text-gray-900 mb-4">You can contact us at {fundraiser.email} or {fundraiser.mobile}</h3>
+                <h3 className="text-xl font-semibold text-gray-900 mb-1">Description</h3>
                 <p className="text-gray-600 leading-relaxed">
                   {fundraiser.description}
                 </p>
@@ -285,15 +290,13 @@ const FundraiserPage = () => {
             </TabPanel>
 
             <TabPanel value={activeTab} index={1}>
-              
               <ImageCarousel images={fundraiser.documents} />
-             
             </TabPanel>
 
             <TabPanel value={activeTab} index={2}>
               <div className="space-y-6">
-                {fundraiser.comments.map((comment, index) => (
-                  <div key={index} className="bg-white p-4 rounded-lg">
+                {fundrr.comments.map((comment, index) => (
+                  <div key={index} className="bg-white p-2 rounded-lg">
                     <div className="flex justify-between mb-2">
                       <h2 className="flex justify-center gap-2 items-center font-semibold text-[20px] text-gray-900">
                         <UserCircleIcon size={30} />
@@ -317,15 +320,15 @@ const FundraiserPage = () => {
               <div className="mb-6">
                 <div className="flex justify-between mb-2">
                   <span className="text-2xl font-bold text-gray-900">
-                    ${fundraiser.currentAmount.toLocaleString()}
+                    ${fundraiser.raisedAmount}
                   </span>
-                  <span className="text-gray-600">
-                    of ${fundraiser.goalAmount.toLocaleString()}
+                  <span className="text-gray-800">
+                    of <span className="text-2xl font-bold">${fundraiser.targetAmount}</span>
                   </span>
                 </div>
                 <ProgressBar
-                  current={fundraiser.currentAmount}
-                  goal={fundraiser.goalAmount}
+                  current={fundraiser.raisedAmount}
+                  goal={fundraiser.targetAmount}
                 />
               </div>
 
@@ -407,7 +410,7 @@ const FundraiserPage = () => {
                   </h4>
                 </div>
                 <div className="space-y-4">
-                  {fundraiser.supporters
+                  {fundrr.supporters
                     .slice(0, showAllSupporters ? undefined : 3)
                     .map((supporter, index) => (
                       <div
