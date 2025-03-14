@@ -210,7 +210,7 @@ const FundraiserPage = () => {
       try {
         setIsLoading(true);
         const response = await axios.get(
-          "http://localhost:5000/fetchRecentSupporters"
+          `http://localhost:5000/fetchRecentSupporters/${fundId}`
         );
         setSupporters(response.data);
       } catch (error) {

@@ -256,6 +256,7 @@ const FundraiserForm = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (currentStep < steps.length - 1) {
+      window.scrollTo(0, 0);
       validateStep();
       if (Object.keys(errors).length === 0) {
         setCurrentStep((prev) => Math.min(prev + 1, steps.length - 1));
@@ -458,7 +459,7 @@ const FundraiserForm = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 pt-16 pb-8 relative">
+    <div className="min-h-screen bg-gray-50 pt-24 pb-8 relative">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Error Message */}
         {submitError && (

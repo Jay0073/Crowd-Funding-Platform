@@ -73,7 +73,7 @@ const ContributionPopup = ({
           await axios.post("http://localhost:5000/donate",{
               amount: customAmount,
               comment: formData.comment,
-              fundId,
+              fundId, fundraiserTitle
             },
             {
               headers: {
