@@ -40,10 +40,10 @@ const UserProfile = () => {
       setIsLoading(true);
       const token = localStorage.getItem("token");
 
-      // const response = await axios.get('http://localhost:5000/profileInfo', {
-      //   headers: { Authorization: `Bearer ${token}` }
-      // });
-      // setUserData(response.data);
+      const response = await axios.get("http://localhost:5000/profileInfo", {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      setUserData(response.data);
     } catch (error) {
       setError(error.message);
     } finally {
@@ -109,33 +109,50 @@ const UserProfile = () => {
             animate="visible"
             className="space-y-4"
           >
-            {userData.donations.map((donation, index) => (
+            {userData.donations.map((donation) => (
               <motion.div
-                key={donation.id}
+                key={donation._id} // Ensure each donation has a unique key
                 variants={itemVariants}
                 className="bg-white p-6 rounded-xl shadow-sm border hover:shadow-md transition-shadow"
               >
                 <div className="flex justify-between items-start">
                   <div>
+                    {/* Fundraise Title */}
                     <h3 className="font-medium text-gray-800">
-                      {donation.title}
+                      {donation.fundraiseTitle || "No Title Provided"}
                     </h3>
+
+                    {/* Recipient Information */}
                     <p className="text-gray-600 text-sm mt-1">
-                      Donated to {donation.recipientName}
+                      Donated to Fundraiser ID: {donation.fundraiseId}
                     </p>
+
+                    {/* Donation Amount and Date */}
                     <div className="flex items-center gap-2 mt-2">
                       <span className="text-blue-600 font-medium">
-                        ${donation.amount}
+                        ${donation.amount.toFixed(2)}
                       </span>
                       <span className="text-gray-400">•</span>
                       <span className="text-gray-500 text-sm">
-                        {new Date(donation.date).toLocaleDateString()}
+                        {new Date(donation.donatedAt).toLocaleDateString()}
                       </span>
                     </div>
+
+                    {/* Optional Comment */}
+                    {donation.comment && (
+                      <p className="text-gray-500 text-sm mt-2 italic">
+                        "{donation.comment}"
+                      </p>
+                    )}
                   </div>
+
+                  {/* Receipt Download Button */}
                   <button
                     onClick={() => {
-                      /* Handle receipt download */
+                      // Handle receipt download (implement this action)
+                      console.log(
+                        `Downloading receipt for donation ID: ${donation._id}`
+                      );
                     }}
                     className="flex items-center gap-1 text-blue-600 hover:text-blue-700 text-sm"
                   >
@@ -143,6 +160,8 @@ const UserProfile = () => {
                     Receipt
                   </button>
                 </div>
+
+                {/* Status Information */}
                 <div className="mt-4 pt-4 border-t">
                   <div className="flex items-center gap-2 text-green-600">
                     <Check size={16} />
@@ -162,21 +181,33 @@ const UserProfile = () => {
             animate="visible"
             className="space-y-4"
           >
-            {userData.fundraises.map((fundraise, index) => (
+            {userData.fundraises.map((fundraise) => (
               <motion.div
-                key={fundraise.id}
+                key={fundraise.fundId} // Unique key using fundId
                 variants={itemVariants}
                 className="bg-white p-6 rounded-xl shadow-sm border hover:shadow-md transition-shadow"
               >
+                {/* Main Content */}
                 <div className="flex justify-between items-start">
                   <div>
+                    {/* Title */}
                     <h3 className="font-medium text-gray-800">
                       {fundraise.title}
                     </h3>
+
+                    {/* Description */}
                     <p className="text-gray-600 text-sm mt-1">
                       {fundraise.description.substring(0, 100)}...
                     </p>
+
+                    {/* Fund Details */}
                     <div className="flex items-center gap-4 mt-4">
+                      <div>
+                        <p className="text-sm text-gray-500">Category</p>
+                        <p className="font-medium text-gray-800">
+                          {fundraise.category}
+                        </p>
+                      </div>
                       <div>
                         <p className="text-sm text-gray-500">Target</p>
                         <p className="font-medium text-gray-800">
@@ -203,9 +234,12 @@ const UserProfile = () => {
                       </div>
                     </div>
                   </div>
+
+                  {/* View Button */}
                   <button
                     onClick={() => {
-                      /* Handle view details */
+                      // Handle view details action here
+                      console.log(`Viewing fundraiser: ${fundraise.fundId}`);
                     }}
                     className="flex items-center gap-1 text-blue-600 hover:text-blue-700"
                   >
@@ -214,7 +248,35 @@ const UserProfile = () => {
                   </button>
                 </div>
 
-                {/* Progress bar */}
+                {/* Additional Details */}
+                <div className="mt-4">
+                  <div>
+                    <p className="text-sm text-gray-500">Organizer Name</p>
+                    <p className="font-medium text-gray-800">
+                      {fundraise.name}
+                    </p>
+                  </div>
+                  <div className="mt-2">
+                    <p className="text-sm text-gray-500">Organizer Email</p>
+                    <p className="font-medium text-gray-800">
+                      {fundraise.email}
+                    </p>
+                  </div>
+                  <div className="mt-2">
+                    <p className="text-sm text-gray-500">Organizer Mobile</p>
+                    <p className="font-medium text-gray-800">
+                      {fundraise.mobile}
+                    </p>
+                  </div>
+                  <div className="mt-2">
+                    <p className="text-sm text-gray-500">End Date</p>
+                    <p className="font-medium text-gray-800">
+                      {new Date(fundraise.endDate).toLocaleDateString()}
+                    </p>
+                  </div>
+                </div>
+
+                {/* Progress Bar */}
                 <div className="mt-4">
                   <div className="w-full bg-gray-200 rounded-full h-2">
                     <div
@@ -277,17 +339,17 @@ const UserProfile = () => {
                   <User size={40} className="text-blue-600" />
                 </div>
                 <div className="text-white">
-                  <h1 className="text-2xl font-bold">{userData.name}</h1>
-                  <div className="flex items-center gap-4 mt-2">
-                    <div className="flex items-center gap-1">
-                      <Mail size={16} />
-                      <span>{userData.email}</span>
+                  <h1 className="text-2xl font-bold">{userData.user.name}</h1>
+                  <div className="flex items-start gap-4 mt-2">
+                    <div>
+                      <p className="flex items-center gap-2"><Mail size={18} />{userData.user.email}</p>
+                      <p className="flex items-center gap-1"><Phone size={18} />{userData.user.mobile}</p>
                     </div>
                     <div className="flex items-center gap-1">
                       <Calendar size={16} />
                       <span>
                         Joined{" "}
-                        {new Date(userData.joinedDate).toLocaleDateString()}
+                        {new Date(userData.user.createdAt).toLocaleDateString()}
                       </span>
                     </div>
                   </div>
@@ -302,24 +364,26 @@ const UserProfile = () => {
                   title="Total Donations"
                   value={`$${
                     userData.donations?.reduce(
-                      (acc, curr) => acc + curr.amount,
+                      (total, donation) => total + parseInt(donation.amount),
                       0
                     ) || 0
                   }`}
                   icon={Heart}
                   color="bg-pink-500"
                 />
+
                 <StatCard
                   title="Fundraises Created"
                   value={userData.fundraises?.length || 0}
                   icon={HandHeart}
                   color="bg-blue-500"
                 />
+
                 <StatCard
                   title="Active Campaigns"
                   value={
-                    userData.fundraises?.filter((f) => f.status === "active")
-                      .length || 0
+                    // userData.fundraises?.filter((f) => f.status === "active").length || 0
+                    userData.fundraises?.length || 0
                   }
                   icon={DollarSign}
                   color="bg-green-500"

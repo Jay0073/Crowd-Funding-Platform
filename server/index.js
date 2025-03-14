@@ -59,8 +59,9 @@ const FundraiseSchema = new mongoose.Schema({
 
 // Donation Schema
 const donationSchema = new mongoose.Schema({
-  fundraiseId: { type: mongoose.Schema.Types.ObjectId, ref: "Fundraise" },
-  donorId: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
+  fundraiseId: { type: String, ref: "Fundraise" },
+  fundraiseTitle: {type: String, ref: "Fundraise"},
+  donorId: { type: String, ref: "User" },
   donorName: {type: String, required: true},
   donorEmail: {type: String, required: true},
   amount: { type: Number, required: true },
@@ -125,16 +126,29 @@ app.get("/fetchuser", authenticateToken, async (req, res) => {
 
 app.get("/profileInfo", authenticateToken, async (req, res) => {
   try {
-    const user = await User.findById(req.user.userId).select("-password");
-    if (!user) {
-      return res.status(404).json({error:"User not found"});
-    }
-    // =============================================================================in this api function, using the user.userId, get the =====================================
-  } catch {
-    console.error("Error fetching user:", error);
-    res.status(500).json({ error: "Server error" });
+    
+    // Fetch user data from the User collection
+    const user = await User.findById(req.user.userId).select("-password"); // Exclude password
+    const userId = user.userId;
+
+    // Fetch all fundraises created by the user
+    const userFundraises = await Fundraise.find({ createdBy: userId });
+
+    // Fetch all donations made by the user
+    const userDonations = await Donation.find({ donorId: userId });
+
+    // Respond with user data, fundraises, and donations
+    res.status(200).json({
+      user,
+      fundraises: userFundraises,
+      donations: userDonations,
+    });
+
+  } catch (error) {
+    console.error("Error fetching profile info:", error.message);
+    res.status(500).json({ error: "Internal server error" });
   }
-})
+});
 
 app.use("/uploads", express.static("uploads"));
 
@@ -302,7 +316,7 @@ app.post("/donate", authenticateToken, async (req, res) => {
     }
 
     // Extract donation details from the request body
-    const { fundId, amount, comment } = req.body;
+    const { fundId, amount, comment, fundraiserTitle } = req.body;
     if (!fundId || !amount) {
       return res
         .status(400)
@@ -311,8 +325,9 @@ app.post("/donate", authenticateToken, async (req, res) => {
 
     // Prepare donation data in the required format
     const donationData = {
-      funfundraiseId: fundId,
-      donorId: user._id,
+      fundraiseId: fundId,
+      fundraiseTitle: fundraiserTitle,
+      donorId: user.userId,
       donorName: user.name,
       donorEmail: user.email,
       amount,
@@ -344,9 +359,10 @@ app.post("/donate", authenticateToken, async (req, res) => {
 });
 
 // Get trending fundraisers
-app.get("/fetchRecentSupporters", async (req, res) => {
+app.get("/fetchRecentSupporters/:id", async (req, res) => {
+  const fundId = req.params.id;
   try {
-    const donations = await Donation.find({}).sort({ createdAt: -1 });
+    const donations = await Donation.find({fundraiseId: fundId}).sort({ createdAt: -1 });
     res.status(200).json(donations);
   } catch (error) {
     console.error("Error fetching donors:", error);
