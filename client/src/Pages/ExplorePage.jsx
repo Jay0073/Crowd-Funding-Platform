@@ -51,11 +51,11 @@ const ExplorePage = () => {
 
   if (error) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="text-red-600 flex items-center gap-2">
-          <AlertCircle />
-          {error}
-        </div>
+      <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+      <div className="bg-white p-6 rounded-lg shadow-lg text-red-600 flex items-center gap-2">
+        <AlertCircle />
+        {error}
+      </div>
       </div>
     );
   }

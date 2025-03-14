@@ -14,10 +14,10 @@ const ProgressBar = ({current, goal}) => {
         </div>
         <div className="flex justify-between items-center mt-2 text-sm">
           <span className="font-medium text-blue-600">
-            ${current}
+            ${current} raised
           </span>
-          <span className="text-gray-900 text-[15px] font-semibold">
-            raised of ${goal}
+          <span className="text-gray-900 text-[17px] font-semibold">
+             of ${goal}
           </span>
         </div>
       </div>
