@@ -9,6 +9,7 @@ import {
   Calendar,
   X,
   Check,
+  CheckCircle,
   AlertCircle,
   ChevronRight,
   ChevronLeft,
@@ -34,8 +35,8 @@ const FundraiserForm = () => {
     documents: [],
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [submitSuccess, setSubmitSuccess] = useState(false);
   const [submitError, setSubmitError] = useState(null);
+  const [showSuccess, setShowSuccess] = useState(false);
 
   const [errors, setErrors] = useState({});
 
@@ -181,7 +182,7 @@ const FundraiserForm = () => {
     try {
       const formData = new FormData();
       files.forEach((file) => formData.append("documents", file)); // Append all images
-  
+
       // Upload images to backend
       const response = await axios.post(
         "http://localhost:5000/upload",
@@ -192,20 +193,20 @@ const FundraiserForm = () => {
           },
         }
       );
-  
+
       if (response.status !== 200) throw new Error("Image upload failed");
-  
+
       return response.data.fileUrls; // Return list of image URLs
     } catch (error) {
       console.error("Image upload error:", error);
       throw error;
     }
   };
-  
 
   const createFundraiser = async () => {
     setIsSubmitting(true);
     setSubmitError(null);
+    const token = localStorage.getItem("token");
 
     try {
       const imageUrls = await uploadImages(formData.documents);
@@ -227,15 +228,15 @@ const FundraiserForm = () => {
         formDataToSend,
         {
           headers: {
+            Authorization: `Bearer ${token}`,
             "Content-Type": "multipart/form-data",
           },
         }
       );
 
       if (response.status === 201) {
+        setShowSuccess(true);
         console.log("Fundraiser created successfully:", response.data);
-        alert("Fundraiser created successfully!");
-        window.location.href = "/";
       }
     } catch (error) {
       console.error(
@@ -457,15 +458,8 @@ const FundraiserForm = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 pt-16 pb-8">
+    <div className="min-h-screen bg-gray-50 pt-16 pb-8 relative">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-        {submitSuccess && (
-          <div className="mb-4 p-4 bg-green-100 text-green-700 rounded-lg flex items-center">
-            <Check className="mr-2" />
-            Fundraiser created successfully!
-          </div>
-        )}
-
         {/* Error Message */}
         {submitError && (
           <div className="mb-4 p-4 bg-red-100 text-red-700 rounded-lg flex items-center">
@@ -473,6 +467,7 @@ const FundraiserForm = () => {
             {submitError}
           </div>
         )}
+
         {/* Header */}
         <div className="bg-white rounded-2xl shadow-lg mb-6 overflow-hidden">
           <div className="bg-blue-600 text-white p-4">
@@ -554,6 +549,30 @@ const FundraiserForm = () => {
           </div>
         </div>
       </div>
+
+      {/* Success Popup */}
+      {showSuccess && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+          <div className="bg-white rounded-xl p-6 text-center">
+            <CheckCircle size={48} className="text-green-500 mx-auto mb-4" />
+            <h2 className="text-2xl font-semibold text-gray-800 mb-4">
+              Your Document is Submitted!
+            </h2>
+            <p className="text-gray-600">
+              we're here to support you on every step of the way.
+            </p>
+            <button
+              onClick={() => {
+                setShowSuccess(false);
+                window.location.href = "/";
+              }}
+              className="mt-6 px-6 py-3 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700 transition-all"
+            >
+              Close
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

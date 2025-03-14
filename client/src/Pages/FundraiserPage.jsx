@@ -132,11 +132,13 @@ const FundraiserPage = () => {
         try {
           setIsLoading(true);
           const response = await axios.get(
-            `http://localhost:5000/fetchfundraise/${fundId}`, {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-        });
+            `http://localhost:5000/fetchfundraise/${fundId}`,
+            {
+              headers: {
+                Authorization: `Bearer ${token}`,
+              },
+            }
+          );
           setFundraiser(response.data);
           console.log("response ", response.data);
         } catch (error) {
@@ -146,57 +148,11 @@ const FundraiserPage = () => {
           setIsLoading(false);
         }
       } else {
-        alert("Please login to fundraise")
+        alert("Please login to fundraise");
       }
     };
     fetchFundraiser();
   }, [fundId]);
-
-  // Sample data
-  const fundrr = {
-    imageUrl: donate2,
-    fundraiserName: "John Doe",
-    title: "Help Save City Animal Shelter",
-    currentAmount: 45000,
-    goalAmount: 60000,
-    endDate: "2025-04-01",
-    description:
-      "Our local animal shelter needs urgent repairs and upgrades to continue providing care for abandoned pets...",
-    documents: [
-      "https://placehold.co/400x600",
-      "https://placehold.co/400x600",
-      "https://placehold.co/400x600",
-      "https://placehold.co/400x600",
-    ],
-    supporters: [
-      {
-        name: "John Doe",
-        amount: 500,
-        message: "Keep up the great work!",
-        date: "2024-03-01",
-      },
-      {
-        name: "Jane Smith",
-        amount: 1000,
-        message: "Happy to help!",
-        date: "2024-03-02",
-      },
-      // Add more supporters...
-    ],
-    comments: [
-      {
-        name: "Alice Brown",
-        message: "This is such an important cause!",
-        date: "2024-03-01",
-      },
-      {
-        name: "Bob Wilson",
-        message: "Thank you for organizing this!",
-        date: "2024-03-02",
-      },
-      // Add more comments...
-    ],
-  };
 
   const formattedDate = new Date(fundraiser.endDate).toLocaleDateString(
     "en-US",
@@ -253,12 +209,12 @@ const FundraiserPage = () => {
     const fetchSupporters = async () => {
       try {
         setIsLoading(true);
-        // const response = await axios.get(
-        //   "http://localhost:5000/fetchRecentSupporters"
-        // );
-        // setSupporters(response.data);
+        const response = await axios.get(
+          "http://localhost:5000/fetchRecentSupporters"
+        );
+        setSupporters(response.data);
       } catch (error) {
-        setError(error.message)
+        setError(error.message);
         console.error("Error fetching fundraisers:", error);
       } finally {
         setIsLoading(false);
@@ -266,7 +222,6 @@ const FundraiserPage = () => {
     };
     fetchSupporters();
   }, []);
-
 
   if (isLoading) {
     return (
@@ -279,10 +234,10 @@ const FundraiserPage = () => {
   if (error) {
     return (
       <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-      <div className="bg-white p-6 rounded-lg shadow-lg text-red-600 flex items-center gap-2">
-        <AlertCircle />
-        {error}
-      </div>
+        <div className="bg-white p-6 rounded-lg shadow-lg text-red-600 flex items-center gap-2">
+          <AlertCircle />
+          {error}
+        </div>
       </div>
     );
   }
@@ -329,7 +284,6 @@ const FundraiserPage = () => {
               </div>
             </div>
 
-            {/* Tab Panels */}
             <TabPanel value={activeTab} index={0}>
               <div className="prose max-w-none">
                 <h2 className="text-2xl font-semibold text-gray-900 mb-1">
@@ -355,18 +309,33 @@ const FundraiserPage = () => {
 
             <TabPanel value={activeTab} index={2}>
               <div className="space-y-6">
-                {fundrr.comments.map((comment, index) => (
-                  <div key={index} className="bg-white p-2 rounded-lg">
+                {supporters.map((supporter, index) => (
+                  <div
+                    key={index}
+                    className="bg-white p-4 rounded-lg shadow-md"
+                  >
                     <div className="flex justify-between mb-2">
-                      <h2 className="flex justify-center gap-2 items-center font-semibold text-[20px] text-gray-900">
-                        <UserCircleIcon size={30} />
-                        {comment.name}
-                      </h2>
-                      <span className="text-sm text-gray-500">
-                        {comment.date}
-                      </span>
+                      <div className="flex items-center gap-2">
+                        <UserCircleIcon size={30} className="text-gray-600" />
+                        <div>
+                          <h2 className="font-semibold text-lg text-gray-900">
+                            {supporter.donorName}
+                          </h2>
+                          <p className="text-sm text-gray-500">
+                            {supporter.donorEmail}
+                          </p>
+                        </div>
+                      </div>
+                      <div className="text-right">
+                        <p className="text-sm text-gray-500">
+                          {new Date(supporter.donatedAt).toLocaleDateString()}
+                        </p>
+                        <p className="text-lg font-semibold text-blue-600">
+                          ${supporter.amount}
+                        </p>
+                      </div>
                     </div>
-                    <p className="text-gray-600">{comment.message}</p>
+                    <p className="text-gray-600">{supporter.comment}</p>
                   </div>
                 ))}
               </div>
@@ -486,10 +455,14 @@ const FundraiserPage = () => {
                         className="flex justify-between items-start"
                       >
                         <div>
-                          <h5 className="font-medium text-gray-900">
-                            {supporter.name}
-                          </h5>
-                          <p className="text-sm text-gray-600">
+                          <div className="flex items-end gap-1.5 mb-1">
+                            <UserCircleIcon size={20} />
+                            <h5 className="font-medium text-gray-900">
+                              {supporter.donorName}
+                            </h5>
+                          </div>
+
+                          <p className="text-sm text-gray-600 line-clamp-1">
                             {supporter.comment}
                           </p>
                         </div>

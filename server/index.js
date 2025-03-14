@@ -343,6 +343,17 @@ app.post("/donate", authenticateToken, async (req, res) => {
   }
 });
 
+// Get trending fundraisers
+app.get("/fetchRecentSupporters", async (req, res) => {
+  try {
+    const donations = await Donation.find({}).sort({ createdAt: -1 });
+    res.status(200).json(donations);
+  } catch (error) {
+    console.error("Error fetching donors:", error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+});
+
 
 // Get all fundraisers
 app.get("/fetchfundraises", async (req, res) => {
