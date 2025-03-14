@@ -103,7 +103,6 @@ const authenticateToken = (req, res, next) => {
       return res.status(403).json({ error: "Invalid token" });
     }
     req.user = decoded; // Add user payload to the request
-    console.log(req.user)
     next();
   });
 };
@@ -126,7 +125,6 @@ app.use("/uploads", express.static("uploads"));
 app.post("/upload", upload.array("documents", 5), (req, res) => {
   try {
     const fileUrls = req.files.map(file => `http://localhost:5000/uploads/${file.filename}`);
-    console.log(fileUrls)
     res.json({
       success: 1,
       fileUrls,
@@ -187,7 +185,6 @@ app.post("/signup", async (req, res) => {
 
 // User login
 app.post("/login", async (req, res) => {
-  console.log(colors.yellow("logging the user"));
   try {
     const { email, password } = req.body;
 
@@ -216,6 +213,8 @@ app.post("/login", async (req, res) => {
         email: user.email,
       },
     });
+    console.log(colors.green("user successfully logged in"));
+
   } catch (error) {
     console.error(colors.red(error));
     res.status(500).json({ error: error.message });
@@ -226,9 +225,7 @@ app.post("/login", async (req, res) => {
 // Fundraise Endpoint
 app.post("/fundraise", authenticateToken, upload.array("documents", 5), async (req, res) => {
   try {
-    console.log("Request body:", req.body);
     const { documents } = req.body;
-    console.log("uploaded images", documents)
 
     // Extract data from form fields
     const {

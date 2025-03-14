@@ -14,7 +14,7 @@ const UserProfile = () => {
   const [userData, setUserData] = useState({
     name: "John Doe",
     email: "john@example.com",
-    phone: "+1234567890",
+    mobile: "+1234567890",
     joinedDate: "2023-01-15",
     donations: [],
     fundraises: []
@@ -26,11 +26,11 @@ const UserProfile = () => {
 
   const fetchUserData = async () => {
     try {
-    //   const token = localStorage.getItem('token');
-    //   const response = await axios.get('http://localhost:5000/api/user/profile', {
-    //     headers: { Authorization: `Bearer ${token}` }
-    //   });
-    //   setUserData(response.data);
+      const token = localStorage.getItem('token');
+      // const response = await axios.get('http://localhost:5000/profile/${userId}', {
+      //   headers: { Authorization: `Bearer ${token}` }
+      // });
+      // setUserData(response.data);
     } catch (error) {
       setError(error.message);
     } finally {

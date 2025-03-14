@@ -99,7 +99,6 @@ const AuthPopup = ({ onClose, returnTo }) => {
   };
 
   const loginUser = async () => {
-    console.log("logging the user");
     try {
       const response = await axios.post(
         "http://localhost:5000/login",
@@ -126,8 +125,6 @@ const AuthPopup = ({ onClose, returnTo }) => {
   };
 
   const signupUser = async () => {
-    console.log("signing the user");
-    console.log("Sending formData:", formData);
     try {
       const response = await axios.post(
         "http://localhost:5000/signup",

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Menu, X, UserCircle2Icon } from "lucide-react";
+import { Menu, X, UserCircle2Icon, LogOut, Mail, Phone } from "lucide-react";
 import AuthPopup from "./AuthPopup";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
@@ -38,43 +38,41 @@ const Button = ({
 };
 
 const ProfilePopup = ({ user, onNavigate, onLogout }) => (
-  <div className="absolute right-0 mt-2 w-72 bg-white shadow-xl rounded-xl p-4 z-50 border border-gray-100">
-    <div className="space-y-3">
-      {/* User Info Section */}
-      <div className="space-y-2 border-b border-gray-100 pb-3">
-        <div className="flex items-center space-x-3">
-          <UserCircle2Icon size={40} className="text-gray-600" />
+  <div className="absolute right-0 mt-2 w-80 bg-white shadow-xl rounded-xl p-4 z-50 border border-gray-100 animate-fade-in">
+    <div className="space-y-4">
+      <div className="space-y-3 border-b border-gray-100 pb-4">
+        <div className="flex items-center space-x-4">
+          <UserCircle2Icon size={50} className="text-blue-600" />
           <div>
-            <h3 className="font-medium text-gray-900">{user?.name}</h3>
+            <h3 className="text-lg font-semibold text-gray-900">{user?.name}</h3>
           </div>
         </div>
-        <div className="space-y-1">
-          <div className="flex items-center space-x-2 text-gray-600">
-            <Mail size={14} />
+        <div className="space-y-2">
+          <div className="flex items-center space-x-3 text-gray-600">
+            <Mail size={16} />
             <span className="text-sm">{user?.email}</span>
           </div>
-          {user?.phone && (
-            <div className="flex items-center space-x-2 text-gray-600">
-              <Phone size={14} />
-              <span className="text-sm">{user?.phone}</span>
+          {user?.mobile && (
+            <div className="flex items-center space-x-3 text-gray-600">
+              <Phone size={16} />
+              <span className="text-sm">{user?.mobile}</span>
             </div>
           )}
         </div>
       </div>
 
-      {/* Actions Section */}
       <div className="space-y-2">
         <button
           onClick={onNavigate}
-          className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-blue-50 hover:text-blue-600 rounded-lg transition-colors"
+          className="w-full px-4 py-2 text-sm text-white bg-blue-600 hover:bg-blue-700 rounded-lg transition-all"
         >
           View Profile
         </button>
         <button
           onClick={onLogout}
-          className="w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-red-50 rounded-lg transition-colors flex items-center space-x-2"
+          className="w-full px-4 py-2 text-sm text-white bg-red-600 hover:bg-red-700 rounded-lg transition-all flex items-center space-x-2"
         >
-          <LogOut size={14} />
+          <LogOut size={16} />
           <span>Logout</span>
         </button>
       </div>
@@ -116,7 +114,6 @@ const Navbar = () => {
 
   useEffect(() => {
     const token = localStorage.getItem("token");
-    console.log(token)
 
     const fetchUser = async () => {
       try {
@@ -185,11 +182,9 @@ const Navbar = () => {
                   className="relative"
                   onMouseEnter={() => setShowProfilePopup(true)}
                   onMouseLeave={() => setShowProfilePopup(false)}
+                  
                 >
-                  <button
-                    className="flex items-center space-x-2 hover:text-blue-600 transition-colors"
-                    onClick={handleProfileClick}
-                  >
+                  <button className="flex items-center space-x-2 hover:text-blue-600 transition-colors" onClick={() => setShowProfilePopup(true)}>
                     <UserCircle2Icon size={35} className="text-gray-800" />
                   </button>
 
@@ -198,6 +193,7 @@ const Navbar = () => {
                       user={user}
                       onNavigate={handleProfileClick}
                       onLogout={handleLogout}
+                      onClickOutside={() => setShowProfilePopup(false)}
                     />
                   )}
                 </div>
