@@ -12,14 +12,20 @@ const ExplorePage = () => {
   const [selectedCategory, setSelectedCategory] = useState("All");
   const [sortBy, setSortBy] = useState("Recent");
   const [fundraisers, setFundraisers] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
     const fetchFundraisers = async () => {
       try {
+        setIsLoading(true);
         const response = await axios.get("http://localhost:5000/fetchfundraises");
         setFundraisers(response.data);
       } catch (error) {
+        setError(error.message);
         console.error("Error fetching fundraisers:", error);
+      } finally {
+        setIsLoading(false);
       }
     };
     fetchFundraisers();
@@ -34,6 +40,25 @@ const ExplorePage = () => {
     "Community Development",
     "Others",
   ];
+
+  if (isLoading) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600" />
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="text-red-600 flex items-center gap-2">
+          <AlertCircle />
+          {error}
+        </div>
+      </div>
+    );
+  }
 
   return (
     

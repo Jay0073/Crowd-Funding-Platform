@@ -26,8 +26,10 @@ const UserProfile = () => {
 
   const fetchUserData = async () => {
     try {
+      setIsLoading(true);
       const token = localStorage.getItem('token');
-      // const response = await axios.get('http://localhost:5000/profile/${userId}', {
+
+      // const response = await axios.get('http://localhost:5000/profileInfo', {
       //   headers: { Authorization: `Bearer ${token}` }
       // });
       // setUserData(response.data);

@@ -120,11 +120,15 @@ const FundraiserPage = () => {
 
   const { id: fundId } = useParams();
 
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState(null);
+
   useEffect(() => {
     const fetchFundraiser = async () => {
       const token = localStorage.getItem("token");
       if (token) {
         try {
+          setIsLoading(true);
           const response = await axios.get(
             `http://localhost:5000/fetchfundraise/${fundId}`, {
             headers: {
@@ -134,7 +138,10 @@ const FundraiserPage = () => {
           setFundraiser(response.data);
           console.log("response ", response.data);
         } catch (error) {
+          setError(error.message);
           console.error("Error fetching fundraiser:", error);
+        } finally {
+          setIsLoading(false);
         }
       } else {
         alert("Please login to fundraise")
@@ -239,6 +246,26 @@ const FundraiserPage = () => {
       window.scrollTo(0, 0);
     }
   }, [showPaymentPopup]);
+
+
+  if (isLoading) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600" />
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="text-red-600 flex items-center gap-2">
+          <AlertCircle />
+          {error}
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-gray-50 py-24">
