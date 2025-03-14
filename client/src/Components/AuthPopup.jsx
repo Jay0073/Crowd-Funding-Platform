@@ -6,8 +6,7 @@ import {
   Phone,
   User,
   ArrowRight,
-  Eye,
-  EyeOff,
+  AlertCircle
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import InputField from "./InputField"; // Import the InputField component

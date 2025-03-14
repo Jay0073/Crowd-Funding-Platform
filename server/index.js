@@ -132,10 +132,10 @@ app.get("/profileInfo", authenticateToken, async (req, res) => {
     const userId = user.userId;
 
     // Fetch all fundraises created by the user
-    const userFundraises = await Fundraise.find({ createdBy: userId });
+    const userFundraises = await Fundraise.find({ createdBy: userId }).sort({ createdAt: -1 });
 
     // Fetch all donations made by the user
-    const userDonations = await Donation.find({ donorId: userId });
+    const userDonations = await Donation.find({ donorId: userId }).sort({ createdAt: -1 });
 
     // Respond with user data, fundraises, and donations
     res.status(200).json({
