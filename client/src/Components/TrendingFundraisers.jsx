@@ -1,22 +1,30 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
-import axios from 'axios';
+import axios from "axios";
 import FundraiserCard from "./FundraiserCard";
 
 const TrendingFundraisers = () => {
-  const [activeIndex, setActiveIndex] = useState(1);
+  const [activeIndex, setActiveIndex] = useState(0); // Set initial index to 0
   const [isHovered, setIsHovered] = useState(false);
   const [isAnimating, setIsAnimating] = useState(false);
   const [fundraisers, setFundraisers] = useState([]);
 
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState(null);
+
   useEffect(() => {
     const fetchFundraisers = async () => {
       try {
-        const response = await axios.get("http://localhost:5000/fetchtrendingfundraises");
+        setIsLoading(true);
+        const response = await axios.get(
+          "http://localhost:5000/fetchtrendingfundraises"
+        );
         setFundraisers(response.data);
       } catch (error) {
-        alert('Check Your Internet connection or Please login again!')
+        setError(error.message)
         console.error("Error fetching fundraisers:", error);
+      } finally {
+        setIsLoading(false);
       }
     };
     fetchFundraisers();
@@ -24,19 +32,21 @@ const TrendingFundraisers = () => {
 
   useEffect(() => {
     let intervalId;
-    if (!isHovered && !isAnimating) {
+    if (!isHovered && !isAnimating && fundraisers.length > 0) {
       intervalId = setInterval(() => {
         handleNext();
       }, 4000);
     }
     return () => clearInterval(intervalId);
-  }, [isHovered, isAnimating]);
+  }, [isHovered, isAnimating, fundraisers]);
 
   const getVisibleSlides = () => {
+    if (fundraisers.length === 0) return [];
     const slides = [...fundraisers];
     const result = [];
     for (let i = activeIndex - 1; i <= activeIndex + 1; i++) {
-      const normalizedIndex = ((i % slides.length) + slides.length) % slides.length;
+      const normalizedIndex =
+        ((i % slides.length) + slides.length) % slides.length;
       result.push({ ...slides[normalizedIndex], position: i - activeIndex });
     }
     return result;
@@ -56,12 +66,33 @@ const TrendingFundraisers = () => {
     setTimeout(() => setIsAnimating(false), 700);
   };
 
+  if (isLoading) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600" />
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="text-red-600 flex items-center gap-2">
+          <AlertCircle />
+          {error}
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="pt-0 pb-18 bg-gradient-to-b from-yellow-100 to-white">
       <div className="text-center mb-16">
         <h2 className="text-5xl font-bold text-gray-900 mb-6">
-          Trending <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-blue-800"> Fundraisers</span>
+          Trending{" "}
+          <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-blue-800">
+            Fundraisers
+          </span>
         </h2>
         <p className="text-xl text-gray-600 max-w-2xl mx-auto">
           Support these popular causes that are making a significant impact
@@ -86,27 +117,31 @@ const TrendingFundraisers = () => {
         </button>
 
         {/* Carousel */}
-        <div 
+        <div
           className="relative h-[600px] overflow-hidden"
           onMouseEnter={() => setIsHovered(true)}
           onMouseLeave={() => setIsHovered(false)}
         >
           <div className="absolute w-full h-full">
-            {getVisibleSlides().map((slide, index) => (
-              <div
-                key={slide.id}
-                className="absolute top-1/2 left-1/2 w-[400px] transition-all duration-700 ease-out"
-                style={{
-                  transform: `translate(${slide.position * 120 - 50}%, -50%) 
-                             scale(${slide.position === 0 ? 1.1 : 0.9})`,
-                  zIndex: slide.position === 0 ? 2 : 1,
-                  opacity: slide.position === 0 ? 1 : 0.7,
-                  filter: slide.position === 0 ? 'blur(0)' : 'blur(2px)'
-                }}
-              >
-                <FundraiserCard {...slide} />
-              </div>
-            ))}
+            {fundraisers.length > 0 ? (
+              getVisibleSlides().map((slide, index) => (
+                <div
+                  key={slide.id || index}
+                  className="absolute top-1/2 left-1/2 w-[400px] transition-all duration-700 ease-out"
+                  style={{
+                    transform: `translate(${slide.position * 120 - 50}%, -50%) 
+                               scale(${slide.position === 0 ? 1.1 : 0.9})`,
+                    zIndex: slide.position === 0 ? 2 : 1,
+                    opacity: slide.position === 0 ? 1 : 0.7,
+                    filter: slide.position === 0 ? "blur(0)" : "blur(2px)"
+                  }}
+                >
+                  <FundraiserCard {...slide} />
+                </div>
+              ))
+            ) : (
+              <p className="text-center text-gray-600">Loading fundraisers...</p>
+            )}
           </div>
         </div>
 
@@ -118,8 +153,8 @@ const TrendingFundraisers = () => {
               onClick={() => !isAnimating && setActiveIndex(index)}
               className={`transition-all duration-300 ${
                 activeIndex === index 
-                  ? 'w-12 h-3 bg-blue-600' 
-                  : 'w-3 h-3 bg-gray-300 hover:bg-gray-400'
+                  ? "w-12 h-3 bg-blue-600" 
+                  : "w-3 h-3 bg-gray-300 hover:bg-gray-400"
               } rounded-full`}
             />
           ))}

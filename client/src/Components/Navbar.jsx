@@ -38,7 +38,7 @@ const Button = ({
 };
 
 const ProfilePopup = ({ user, onNavigate, onLogout }) => (
-  <div className="absolute right-0 mt-2 w-80 bg-white shadow-xl rounded-xl p-4 z-50 border border-gray-100 animate-fade-in">
+  <div className="absolute right-0 mt-2 w-80 bg-white shadow-xl rounded-xl p-4 z-50 border border-gray-100">
     <div className="space-y-4">
       <div className="space-y-3 border-b border-gray-100 pb-4">
         <div className="flex items-center space-x-4">
@@ -64,13 +64,13 @@ const ProfilePopup = ({ user, onNavigate, onLogout }) => (
       <div className="space-y-2">
         <button
           onClick={onNavigate}
-          className="w-full px-4 py-2 text-sm text-white bg-blue-600 hover:bg-blue-700 rounded-lg transition-all"
+          className="w-full px-4 py-2 text-sm text-white bg-blue-600 hover:bg-blue-700 cursor-pointer rounded-lg transition-all"
         >
           View Profile
         </button>
         <button
           onClick={onLogout}
-          className="w-full px-4 py-2 text-sm text-white bg-red-600 hover:bg-red-700 rounded-lg transition-all flex items-center space-x-2"
+          className="w-full px-4 py-2 text-sm text-white bg-red-600 hover:bg-red-700 cursor-pointer rounded-lg transition-all flex items-center space-x-2"
         >
           <LogOut size={16} />
           <span>Logout</span>
@@ -87,6 +87,8 @@ const Navbar = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [user, setUser] = useState(null);
   const [showProfilePopup, setShowProfilePopup] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+    const [error, setError] = useState(null);
 
   const navigate = useNavigate();
 
@@ -105,6 +107,7 @@ const Navbar = () => {
     setUser(null);
     setShowProfilePopup(false);
     navigate("/");
+    window.location.reload()
   };
 
   const handleProfileClick = () => {
@@ -117,6 +120,7 @@ const Navbar = () => {
 
     const fetchUser = async () => {
       try {
+        setIsLoading(true);
         const response = await axios.get("http://localhost:5000/fetchuser", {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -125,10 +129,13 @@ const Navbar = () => {
         setUser(response.data);
         setIsLoggedIn(true);
       } catch (error) {
+        setError(error.message)
         console.error("Error fetching user:", error);
         localStorage.removeItem("token"); // Clear invalid token
         setIsLoggedIn(false);
         setUser(null);
+      } finally {
+        setIsLoading(false);
       }
     };
 
@@ -142,6 +149,25 @@ const Navbar = () => {
       window.scrollTo(0, 0);
     }
   }, [showAuthPopup]);
+
+  if (isLoading) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600" />
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="text-red-600 flex items-center gap-2">
+          <AlertCircle />
+          {error}
+        </div>
+      </div>
+    );
+  }
 
   return (
     <nav
@@ -178,23 +204,26 @@ const Navbar = () => {
               </Button>
 
               {isLoggedIn ? (
-                <div
-                  className="relative"
-                  onMouseEnter={() => setShowProfilePopup(true)}
-                  onMouseLeave={() => setShowProfilePopup(false)}
-                  
-                >
-                  <button className="flex items-center space-x-2 hover:text-blue-600 transition-colors" onClick={() => setShowProfilePopup(true)}>
-                    <UserCircle2Icon size={35} className="text-gray-800" />
+                <div className="relative">
+                  <button
+                    className="flex items-center space-x-2 hover:text-blue-600 transition-colors"
+                    onClick={() => setShowProfilePopup((prev) => !prev)}
+                  >
+                    <UserCircle2Icon size={35} className="text-gray-800 cursor-pointer" />
                   </button>
 
                   {showProfilePopup && (
-                    <ProfilePopup
-                      user={user}
-                      onNavigate={handleProfileClick}
-                      onLogout={handleLogout}
-                      onClickOutside={() => setShowProfilePopup(false)}
-                    />
+                    <>
+                      <div
+                        className="fixed inset-0 bg-black/50 z-40"
+                        onClick={() => setShowProfilePopup(false)}
+                      ></div>
+                      <ProfilePopup
+                        user={user}
+                        onNavigate={handleProfileClick}
+                        onLogout={handleLogout}
+                      />
+                    </>
                   )}
                 </div>
               ) : (

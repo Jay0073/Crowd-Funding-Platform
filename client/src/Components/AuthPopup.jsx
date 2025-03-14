@@ -27,6 +27,8 @@ const AuthPopup = ({ onClose, returnTo }) => {
   const [errors, setErrors] = useState({});
   const [showSuccess, setShowSuccess] = useState(false);
   
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   const quotes = {
     login: {
@@ -100,6 +102,7 @@ const AuthPopup = ({ onClose, returnTo }) => {
 
   const loginUser = async () => {
     try {
+      setIsLoading(true);
       const response = await axios.post(
         "http://localhost:5000/login",
         formData,
@@ -111,21 +114,24 @@ const AuthPopup = ({ onClose, returnTo }) => {
       );
 
       if (response.status === 200) {
+        setIsLoading(false);
         setShowSuccess(true);
         console.log("User logged in successfully:", response.data);
-        alert(response.data)
         localStorage.setItem("token", response.data.token);
-        window.location.href = returnTo || "/";
       } else {
         console.error("Error:", response.data);
       }
     } catch (error) {
+      setError(error.message)
       console.error("Error:", error);
+    } finally {
+      setIsLoading(false);
     }
   };
 
   const signupUser = async () => {
     try {
+      setIsLoading(true);
       const response = await axios.post(
         "http://localhost:5000/signup",
         formData,
@@ -137,6 +143,7 @@ const AuthPopup = ({ onClose, returnTo }) => {
       );
 
       if (response.status === 201) {
+        setIsLoading(false)
         setShowSuccess(true);
         console.log("User created successfully:", response.data);
         localStorage.setItem("token", response.data.token);
@@ -145,7 +152,10 @@ const AuthPopup = ({ onClose, returnTo }) => {
         console.error("Error:", response.data);
       }
     } catch (error) {
+      setError(error.message);
       console.error("Error:", error);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -176,6 +186,25 @@ const AuthPopup = ({ onClose, returnTo }) => {
     },
   };
 
+  if (isLoading) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600" />
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="text-red-600 flex items-center gap-2">
+          <AlertCircle />
+          {error}
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
       <motion.div
@@ -189,7 +218,7 @@ const AuthPopup = ({ onClose, returnTo }) => {
         <div className="relative bg-blue-600 text-white p-6">
           <button
             onClick={onClose}
-            className="absolute right-4 top-4 text-white/80 hover:text-white transition-colors"
+            className="absolute cursor-pointer right-4 top-4 text-white/80 hover:text-white transition-colors"
           >
             <X size={24} />
           </button>
