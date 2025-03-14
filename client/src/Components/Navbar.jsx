@@ -87,7 +87,6 @@ const Navbar = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [user, setUser] = useState(null);
   const [showProfilePopup, setShowProfilePopup] = useState(false);
-  const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState(null);
 
   const navigate = useNavigate();
@@ -120,7 +119,6 @@ const Navbar = () => {
 
     const fetchUser = async () => {
       try {
-        setIsLoading(true);
         const response = await axios.get("http://localhost:5000/fetchuser", {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -134,8 +132,6 @@ const Navbar = () => {
         localStorage.removeItem("token"); // Clear invalid token
         setIsLoggedIn(false);
         setUser(null);
-      } finally {
-        setIsLoading(false);
       }
     };
 
@@ -150,13 +146,6 @@ const Navbar = () => {
     }
   }, [showAuthPopup]);
 
-  if (isLoading) {
-    return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600" />
-      </div>
-    );
-  }
 
   if (error) {
     return (

@@ -61,6 +61,8 @@ const FundraiseSchema = new mongoose.Schema({
 const donationSchema = new mongoose.Schema({
   fundraiseId: { type: mongoose.Schema.Types.ObjectId, ref: "Fundraise" },
   donorId: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
+  donorName: {type: String, required: true},
+  donorEmail: {type: String, required: true},
   amount: { type: Number, required: true },
   donatedAt: { type: Date, default: Date.now },
 });
@@ -119,6 +121,19 @@ app.get("/fetchuser", authenticateToken, async (req, res) => {
     res.status(500).json({ error: "Server error" });
   }
 });
+
+app.get("/profileInfo", authenticateToken, async (req, res) => {
+  try {
+    const user = await User.findById(req.user.userId).select("-password");
+    if (!user) {
+      return res.status(404).json({error:"User not found"});
+    }
+    // =============================================================================in this api function, using the user.userId, get the =====================================
+  } catch {
+    console.error("Error fetching user:", error);
+    res.status(500).json({ error: "Server error" });
+  }
+})
 
 app.use("/uploads", express.static("uploads"));
 

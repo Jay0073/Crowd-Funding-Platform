@@ -131,7 +131,6 @@ const AuthPopup = ({ onClose, returnTo }) => {
 
   const signupUser = async () => {
     try {
-      setIsLoading(true);
       const response = await axios.post(
         "http://localhost:5000/signup",
         formData,
@@ -143,7 +142,6 @@ const AuthPopup = ({ onClose, returnTo }) => {
       );
 
       if (response.status === 201) {
-        setIsLoading(false)
         setShowSuccess(true);
         console.log("User created successfully:", response.data);
         localStorage.setItem("token", response.data.token);
@@ -154,8 +152,6 @@ const AuthPopup = ({ onClose, returnTo }) => {
     } catch (error) {
       setError(error.message);
       console.error("Error:", error);
-    } finally {
-      setIsLoading(false);
     }
   };
 
@@ -186,13 +182,6 @@ const AuthPopup = ({ onClose, returnTo }) => {
     },
   };
 
-  if (isLoading) {
-    return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600" />
-      </div>
-    );
-  }
 
   if (error) {
     return (

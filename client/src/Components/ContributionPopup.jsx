@@ -45,9 +45,9 @@ const ContributionPopup = ({ onClose, fundraiserName }) => {
   });
   const [errors, setErrors] = useState({});
   const [showSuccess, setShowSuccess] = useState(false);
+  const [error, setError] = useState(null);
 
   const predefinedAmounts = [100, 300, 500];
-
   const displayAmount = customAmount || "0";
 
   const handleAmountSelect = (value) => {
@@ -111,8 +111,8 @@ const ContributionPopup = ({ onClose, fundraiserName }) => {
 
           setShowSuccess(true);
         } catch (error) {
+          setError(error.message)
           console.error("Error processing donation:", error);
-          alert("Error processing donation. Please try again.");
         }
       } else {
         alert("Please fill in all required fields and enter a valid email.");
@@ -121,6 +121,17 @@ const ContributionPopup = ({ onClose, fundraiserName }) => {
       alert("Please login to donate");
     }
   };
+
+  if (error) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="text-red-600 flex items-center gap-2">
+          <AlertCircle />
+          {error}
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
