@@ -12,6 +12,7 @@ import {
   Instagram,
   Mail,
   Copy,
+  AlertCircle,
   UserCircleIcon,
 } from "lucide-react";
 import axios from "axios";
@@ -117,6 +118,7 @@ const FundraiserPage = () => {
   const [showAllSupporters, setShowAllSupporters] = useState(false);
   const [isShareMenuOpen, setIsShareMenuOpen] = useState(false);
   const [fundraiser, setFundraiser] = useState([]);
+  const [supporters, setSupporters] = useState([]);
 
   const { id: fundId } = useParams();
 
@@ -247,6 +249,24 @@ const FundraiserPage = () => {
     }
   }, [showPaymentPopup]);
 
+  useEffect(() => {
+    const fetchSupporters = async () => {
+      try {
+        setIsLoading(true);
+        // const response = await axios.get(
+        //   "http://localhost:5000/fetchRecentSupporters"
+        // );
+        // setSupporters(response.data);
+      } catch (error) {
+        setError(error.message)
+        console.error("Error fetching fundraisers:", error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    fetchSupporters();
+  }, []);
+
 
   if (isLoading) {
     return (
@@ -258,11 +278,11 @@ const FundraiserPage = () => {
 
   if (error) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="text-red-600 flex items-center gap-2">
-          <AlertCircle />
-          {error}
-        </div>
+      <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+      <div className="bg-white p-6 rounded-lg shadow-lg text-red-600 flex items-center gap-2">
+        <AlertCircle />
+        {error}
+      </div>
       </div>
     );
   }
@@ -458,7 +478,7 @@ const FundraiserPage = () => {
                   </h4>
                 </div>
                 <div className="space-y-4">
-                  {fundrr.supporters
+                  {supporters
                     .slice(0, showAllSupporters ? undefined : 3)
                     .map((supporter, index) => (
                       <div
@@ -470,7 +490,7 @@ const FundraiserPage = () => {
                             {supporter.name}
                           </h5>
                           <p className="text-sm text-gray-600">
-                            {supporter.message}
+                            {supporter.comment}
                           </p>
                         </div>
                         <span className="font-medium text-blue-600">
@@ -491,7 +511,12 @@ const FundraiserPage = () => {
           {showPaymentPopup && (
             <ContributionPopup
               onClose={() => setShowPaymentPopup(false)}
-              fundraiserName="Help Save City Animal Shelter"
+              fundraiserTitle={fundraiser.title}
+              fundraiserName={fundraiser.name}
+              fundraiserEmail={fundraiser.email}
+              fundraiserGoal={fundraiser.targetAmount}
+              fundraiserGained={fundraiser.raisedAmount}
+              fundId={fundId}
             />
           )}
         </div>

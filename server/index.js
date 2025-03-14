@@ -64,6 +64,7 @@ const donationSchema = new mongoose.Schema({
   donorName: {type: String, required: true},
   donorEmail: {type: String, required: true},
   amount: { type: Number, required: true },
+  comment: {type: String},
   donatedAt: { type: Date, default: Date.now },
 });
 
@@ -292,21 +293,56 @@ app.post("/fundraise", authenticateToken, upload.array("documents", 5), async (r
   }
 });
 
-app.post("/donations", authenticateToken, async (req, res) => {
+app.post("/donate", authenticateToken, async (req, res) => {
   try {
-    const donation = new Donation(req.body);
-    await donation.save();
+    // Fetch user details from the database
+    const user = await User.findById(req.user.userId).select("-password");
+    if (!user) {
+      return res.status(404).json({ error: "User not found" });
+    }
 
-    // Update campaign raised amount
-    await Campaign.findByIdAndUpdate(req.body.campaignId, {
-      $inc: { raisedAmount: req.body.amount },
-    });
+    // Extract donation details from the request body
+    const { fundId, amount, comment } = req.body;
+    if (!fundId || !amount) {
+      return res
+        .status(400)
+        .json({ error: "Fundraise ID and amount are required" });
+    }
 
-    res.status(201).json({ message: "Donation successful" });
+    // Prepare donation data in the required format
+    const donationData = {
+      funfundraiseId: fundId,
+      donorId: user._id,
+      donorName: user.name,
+      donorEmail: user.email,
+      amount,
+      comment: comment || "", // Optional comment
+    };
+
+    // Save or process the donation (e.g., save to a Donations collection in the DB)
+    await Donation.create(donationData);
+
+     // Update the fundraiser's raised amount
+     const fundraiser = await Fundraise.findOne({fundId: fundId}); // Assuming Fundraiser is your model
+     if (!fundraiser) {
+       return res.status(404).json({ error: "Fundraiser not found" });
+     }
+ 
+     // Increment the raised amount
+    fundraiser.raisedAmount = parseInt(fundraiser.raisedAmount) + parseInt(amount); 
+     await fundraiser.save();
+ 
+     // Respond with success
+     res.status(201).json({
+       message: "Donation successful",
+       donationData
+     });
   } catch (error) {
+    console.error("Error in /donate route:", error.message);
     res.status(500).json({ error: error.message });
   }
 });
+
 
 // Get all fundraisers
 app.get("/fetchfundraises", async (req, res) => {

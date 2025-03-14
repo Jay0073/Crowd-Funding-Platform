@@ -1,9 +1,20 @@
 import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import {
-  User, Mail, Phone, Calendar, DollarSign, Heart,
-  HandHeart, Edit, LogOut, ChevronRight, ExternalLink,
-  AlertCircle, Check, Download
+  User,
+  Mail,
+  Phone,
+  Calendar,
+  DollarSign,
+  Heart,
+  HandHeart,
+  Edit,
+  LogOut,
+  ChevronRight,
+  ExternalLink,
+  AlertCircle,
+  Check,
+  Download,
 } from "lucide-react";
 import axios from "axios";
 
@@ -17,7 +28,7 @@ const UserProfile = () => {
     mobile: "+1234567890",
     joinedDate: "2023-01-15",
     donations: [],
-    fundraises: []
+    fundraises: [],
   });
 
   useEffect(() => {
@@ -27,7 +38,7 @@ const UserProfile = () => {
   const fetchUserData = async () => {
     try {
       setIsLoading(true);
-      const token = localStorage.getItem('token');
+      const token = localStorage.getItem("token");
 
       // const response = await axios.get('http://localhost:5000/profileInfo', {
       //   headers: { Authorization: `Bearer ${token}` }
@@ -44,8 +55,8 @@ const UserProfile = () => {
     hidden: { opacity: 0 },
     visible: {
       opacity: 1,
-      transition: { duration: 0.5, staggerChildren: 0.1 }
-    }
+      transition: { duration: 0.5, staggerChildren: 0.1 },
+    },
   };
 
   const itemVariants = {
@@ -53,8 +64,8 @@ const UserProfile = () => {
     visible: {
       y: 0,
       opacity: 1,
-      transition: { duration: 0.5 }
-    }
+      transition: { duration: 0.5 },
+    },
   };
 
   const TabButton = ({ name, icon: Icon, active }) => (
@@ -63,9 +74,7 @@ const UserProfile = () => {
       whileTap={{ scale: 0.98 }}
       onClick={() => setActiveTab(name.toLowerCase())}
       className={`flex items-center gap-2 px-6 py-3 rounded-lg font-medium transition-all ${
-        active 
-          ? "bg-blue-600 text-white" 
-          : "text-gray-600 hover:bg-gray-100"
+        active ? "bg-blue-600 text-white" : "text-gray-600 hover:bg-gray-100"
       }`}
     >
       <Icon size={20} />
@@ -108,7 +117,9 @@ const UserProfile = () => {
               >
                 <div className="flex justify-between items-start">
                   <div>
-                    <h3 className="font-medium text-gray-800">{donation.title}</h3>
+                    <h3 className="font-medium text-gray-800">
+                      {donation.title}
+                    </h3>
                     <p className="text-gray-600 text-sm mt-1">
                       Donated to {donation.recipientName}
                     </p>
@@ -123,7 +134,9 @@ const UserProfile = () => {
                     </div>
                   </div>
                   <button
-                    onClick={() => {/* Handle receipt download */}}
+                    onClick={() => {
+                      /* Handle receipt download */
+                    }}
                     className="flex items-center gap-1 text-blue-600 hover:text-blue-700 text-sm"
                   >
                     <Download size={16} />
@@ -157,7 +170,9 @@ const UserProfile = () => {
               >
                 <div className="flex justify-between items-start">
                   <div>
-                    <h3 className="font-medium text-gray-800">{fundraise.title}</h3>
+                    <h3 className="font-medium text-gray-800">
+                      {fundraise.title}
+                    </h3>
                     <p className="text-gray-600 text-sm mt-1">
                       {fundraise.description.substring(0, 100)}...
                     </p>
@@ -176,25 +191,29 @@ const UserProfile = () => {
                       </div>
                       <div>
                         <p className="text-sm text-gray-500">Status</p>
-                        <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
-                          fundraise.status === 'active' 
-                            ? 'bg-green-100 text-green-800'
-                            : 'bg-yellow-100 text-yellow-800'
-                        }`}>
+                        <span
+                          className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
+                            fundraise.status === "active"
+                              ? "bg-green-100 text-green-800"
+                              : "bg-yellow-100 text-yellow-800"
+                          }`}
+                        >
                           {fundraise.status}
                         </span>
                       </div>
                     </div>
                   </div>
                   <button
-                    onClick={() => {/* Handle view details */}}
+                    onClick={() => {
+                      /* Handle view details */
+                    }}
                     className="flex items-center gap-1 text-blue-600 hover:text-blue-700"
                   >
                     <ExternalLink size={16} />
                     View
                   </button>
                 </div>
-                
+
                 {/* Progress bar */}
                 <div className="mt-4">
                   <div className="w-full bg-gray-200 rounded-full h-2">
@@ -202,9 +221,10 @@ const UserProfile = () => {
                       className="bg-blue-600 h-2 rounded-full"
                       style={{
                         width: `${Math.min(
-                          (fundraise.raisedAmount / fundraise.targetAmount) * 100,
+                          (fundraise.raisedAmount / fundraise.targetAmount) *
+                            100,
                           100
-                        )}%`
+                        )}%`,
                       }}
                     />
                   </div>
@@ -229,8 +249,8 @@ const UserProfile = () => {
 
   if (error) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="text-red-600 flex items-center gap-2">
+      <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+        <div className="bg-white p-6 rounded-lg shadow-lg text-red-600 flex items-center gap-2">
           <AlertCircle />
           {error}
         </div>
@@ -247,7 +267,7 @@ const UserProfile = () => {
           animate="visible"
         >
           {/* Profile Header */}
-          <motion.div 
+          <motion.div
             variants={itemVariants}
             className="bg-white rounded-2xl shadow-lg overflow-hidden mb-6"
           >
@@ -265,7 +285,10 @@ const UserProfile = () => {
                     </div>
                     <div className="flex items-center gap-1">
                       <Calendar size={16} />
-                      <span>Joined {new Date(userData.joinedDate).toLocaleDateString()}</span>
+                      <span>
+                        Joined{" "}
+                        {new Date(userData.joinedDate).toLocaleDateString()}
+                      </span>
                     </div>
                   </div>
                 </div>
@@ -277,7 +300,12 @@ const UserProfile = () => {
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 <StatCard
                   title="Total Donations"
-                  value={`$${userData.donations?.reduce((acc, curr) => acc + curr.amount, 0) || 0}`}
+                  value={`$${
+                    userData.donations?.reduce(
+                      (acc, curr) => acc + curr.amount,
+                      0
+                    ) || 0
+                  }`}
                   icon={Heart}
                   color="bg-pink-500"
                 />
@@ -289,7 +317,10 @@ const UserProfile = () => {
                 />
                 <StatCard
                   title="Active Campaigns"
-                  value={userData.fundraises?.filter(f => f.status === 'active').length || 0}
+                  value={
+                    userData.fundraises?.filter((f) => f.status === "active")
+                      .length || 0
+                  }
                   icon={DollarSign}
                   color="bg-green-500"
                 />
@@ -314,9 +345,7 @@ const UserProfile = () => {
               </div>
             </div>
 
-            <div className="p-6">
-              {renderContent()}
-            </div>
+            <div className="p-6">{renderContent()}</div>
           </div>
         </motion.div>
       </div>
