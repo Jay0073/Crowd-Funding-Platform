@@ -89,6 +89,38 @@ if (!fs.existsSync(uploadDir)) {
   fs.mkdirSync(uploadDir);
 }
 
+// Middleware to authenticate token
+const authenticateToken = (req, res, next) => {
+  const authHeader = req.headers.authorization;
+  if (!authHeader || !authHeader.startsWith("Bearer ")) {
+    return res.status(401).json({ error: "Unauthorized: No token provided" });
+  }
+
+  const token = authHeader.split(" ")[1];
+
+  jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
+    if (err) {
+      return res.status(403).json({ error: "Invalid token" });
+    }
+    req.user = decoded; // Add user payload to the request
+    console.log(req.user)
+    next();
+  });
+};
+
+app.get("/fetchuser", authenticateToken, async (req, res) => {
+  try {
+    const user = await User.findById(req.user.userId).select("-password"); // Exclude password
+    if (!user) {
+      return res.status(404).json({ error: "User not found" });
+    }
+    res.status(200).json(user);
+  } catch (error) {
+    console.error("Error fetching user:", error);
+    res.status(500).json({ error: "Server error" });
+  }
+});
+
 app.use("/uploads", express.static("uploads"));
 
 app.post("/upload", upload.array("documents", 5), (req, res) => {
@@ -107,7 +139,6 @@ app.post("/upload", upload.array("documents", 5), (req, res) => {
 
 // User registration with password hashing
 app.post("/signup", async (req, res) => {
-  console.log(colors.yellow("signing the user"));
   try {
     const { name, email, mobile, password } = req.body;
 
@@ -146,6 +177,8 @@ app.post("/signup", async (req, res) => {
         mobile: user.mobile,
       },
     });
+
+    console.log(colors.green(user.name, " signed in successfully"))
   } catch (error) {
     console.error(colors.red(error));
     res.status(500).json({ error: error.message });
@@ -191,7 +224,7 @@ app.post("/login", async (req, res) => {
 
 
 // Fundraise Endpoint
-app.post("/fundraise", upload.array("documents", 5), async (req, res) => {
+app.post("/fundraise", authenticateToken, upload.array("documents", 5), async (req, res) => {
   try {
     console.log("Request body:", req.body);
     const { documents } = req.body;
@@ -247,7 +280,7 @@ app.post("/fundraise", upload.array("documents", 5), async (req, res) => {
   }
 });
 
-app.post("/donations", async (req, res) => {
+app.post("/donations", authenticateToken, async (req, res) => {
   try {
     const donation = new Donation(req.body);
     await donation.save();

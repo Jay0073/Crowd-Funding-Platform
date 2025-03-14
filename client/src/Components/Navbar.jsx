@@ -1,17 +1,25 @@
 import React, { useState, useEffect } from "react";
-import { Menu, X } from "lucide-react";
+import { Menu, X, UserCircle2Icon } from "lucide-react";
 import AuthPopup from "./AuthPopup";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 const NavLink = ({ href, children }) => (
   <a
     href={href}
-    className="text-gray-700 hover:text-blue-600  px-3 py-2 text-[15px] font-medium transition-all duration-100 hover:scale-105"
+    className="text-gray-700 hover:text-blue-600 px-3 py-2 text-[15px] font-medium transition-all duration-100 hover:scale-105"
   >
     {children}
   </a>
 );
 
-const Button = ({ variant = "default", children, className = "", onClick, ...props }) => {
+const Button = ({
+  variant = "default",
+  children,
+  className = "",
+  onClick,
+  ...props
+}) => {
   const variants = {
     default: "bg-gray-100 text-gray-800 hover:bg-gray-200",
     primary: "bg-blue-600 text-blue-50 hover:bg-blue-700",
@@ -29,10 +37,60 @@ const Button = ({ variant = "default", children, className = "", onClick, ...pro
   );
 };
 
+const ProfilePopup = ({ user, onNavigate, onLogout }) => (
+  <div className="absolute right-0 mt-2 w-72 bg-white shadow-xl rounded-xl p-4 z-50 border border-gray-100">
+    <div className="space-y-3">
+      {/* User Info Section */}
+      <div className="space-y-2 border-b border-gray-100 pb-3">
+        <div className="flex items-center space-x-3">
+          <UserCircle2Icon size={40} className="text-gray-600" />
+          <div>
+            <h3 className="font-medium text-gray-900">{user?.name}</h3>
+          </div>
+        </div>
+        <div className="space-y-1">
+          <div className="flex items-center space-x-2 text-gray-600">
+            <Mail size={14} />
+            <span className="text-sm">{user?.email}</span>
+          </div>
+          {user?.phone && (
+            <div className="flex items-center space-x-2 text-gray-600">
+              <Phone size={14} />
+              <span className="text-sm">{user?.phone}</span>
+            </div>
+          )}
+        </div>
+      </div>
+
+      {/* Actions Section */}
+      <div className="space-y-2">
+        <button
+          onClick={onNavigate}
+          className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-blue-50 hover:text-blue-600 rounded-lg transition-colors"
+        >
+          View Profile
+        </button>
+        <button
+          onClick={onLogout}
+          className="w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-red-50 rounded-lg transition-colors flex items-center space-x-2"
+        >
+          <LogOut size={14} />
+          <span>Logout</span>
+        </button>
+      </div>
+    </div>
+  </div>
+);
+
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [scrollY, setScrollY] = useState(0);
   const [showAuthPopup, setShowAuthPopup] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [user, setUser] = useState(null);
+  const [showProfilePopup, setShowProfilePopup] = useState(false);
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -43,38 +101,49 @@ const Navbar = () => {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    setIsLoggedIn(false);
+    setUser(null);
+    setShowProfilePopup(false);
+    navigate("/");
+  };
+
+  const handleProfileClick = () => {
+    navigate("/profile");
+    setShowProfilePopup(false);
+  };
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    console.log(token)
+
+    const fetchUser = async () => {
+      try {
+        const response = await axios.get("http://localhost:5000/fetchuser", {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        setUser(response.data);
+        setIsLoggedIn(true);
+      } catch (error) {
+        console.error("Error fetching user:", error);
+        localStorage.removeItem("token"); // Clear invalid token
+        setIsLoggedIn(false);
+        setUser(null);
+      }
+    };
+
+    if (token) {
+      fetchUser();
+    }
+  }, []);
+
   useEffect(() => {
     if (showAuthPopup) {
       window.scrollTo(0, 0);
     }
-  }, [showAuthPopup]);
-
-  useEffect(() => {
-    // Function to prevent scrolling
-    const preventScroll = (e) => {
-      e.preventDefault();
-      e.stopPropagation(); // Stop event bubbling
-      return false;
-    };
-
-    if (showAuthPopup) {
-      // Add event listeners to prevent scrolling
-      window.addEventListener("wheel", preventScroll, { passive: false }); // Modern browsers
-      window.addEventListener("touchmove", preventScroll, { passive: false }); // For touch devices
-      document.body.style.overflow = "hidden"; // fallback for some cases
-    } else {
-      // Remove event listeners
-      window.removeEventListener("wheel", preventScroll);
-      window.removeEventListener("touchmove", preventScroll);
-      document.body.style.overflow = "unset";
-    }
-
-    // Cleanup function to remove listeners when component unmounts or state changes
-    return () => {
-      window.removeEventListener("wheel", preventScroll);
-      window.removeEventListener("touchmove", preventScroll);
-      document.body.style.overflow = "unset";
-    };
   }, [showAuthPopup]);
 
   return (
@@ -96,7 +165,6 @@ const Navbar = () => {
             </div>
           </a>
 
-          {/* Desktop Navigation */}
           <div className="hidden md:flex items-center space-x-2">
             <NavLink href="/explore">
               <span className="text-[20px] font-semibold">
@@ -106,25 +174,50 @@ const Navbar = () => {
             <NavLink href="/aboutus">
               <span className="text-[20px] font-semibold">About Us</span>
             </NavLink>
+
             <div className="pl-4 flex items-center space-x-3">
-              <Button
-                variant="outline"
-                onClick={() => setShowAuthPopup(true)}>
-                  Login
+              <Button variant="primary" className="px-3 py-3">
+                <a href="/fundraisingform">Start Fundraising</a>
               </Button>
-              <Button variant="primary" className="px-3 py-3 text-[15px] font-medium transition-all duration-100 text-white"><a className="text-white hover:scale-105" href='/fundraisingform' >Start Fundraising</a></Button>
+
+              {isLoggedIn ? (
+                <div
+                  className="relative"
+                  onMouseEnter={() => setShowProfilePopup(true)}
+                  onMouseLeave={() => setShowProfilePopup(false)}
+                >
+                  <button
+                    className="flex items-center space-x-2 hover:text-blue-600 transition-colors"
+                    onClick={handleProfileClick}
+                  >
+                    <UserCircle2Icon size={35} className="text-gray-800" />
+                  </button>
+
+                  {showProfilePopup && (
+                    <ProfilePopup
+                      user={user}
+                      onNavigate={handleProfileClick}
+                      onLogout={handleLogout}
+                    />
+                  )}
+                </div>
+              ) : (
+                <Button
+                  variant="outline"
+                  onClick={() => setShowAuthPopup(true)}
+                >
+                  Login
+                </Button>
+              )}
             </div>
           </div>
           {showAuthPopup && (
             <AuthPopup
-              onClose={() => {
-                setShowAuthPopup(false);
-              }}
+              onClose={() => setShowAuthPopup(false)}
               returnTo={window.location.pathname}
             />
           )}
 
-          {/* Mobile menu button */}
           <div className="md:hidden">
             <button
               onClick={() => setIsMenuOpen(!isMenuOpen)}
@@ -133,38 +226,6 @@ const Navbar = () => {
             >
               {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
             </button>
-          </div>
-        </div>
-
-        {/* Mobile Navigation */}
-        <div
-          className={`md:hidden transition-all duration-300 ease-in-out ${
-            isMenuOpen ? "max-h-96 opacity-100" : "max-h-0 opacity-0"
-          } overflow-hidden`}
-        >
-          <div className="px-2 pt-2 pb-3 space-y-2 bg-white rounded-lg shadow-lg mb-4">
-            <a
-              href="/explore"
-              className="block px-4 py-2.5 text-[15px] font-medium text-gray-700 hover:text-blue-600 hover:bg-gray-50 rounded-md transition-colors duration-200"
-              onClick={() => setIsMenuOpen(false)}
-            >
-              Browse Fundraisers
-            </a>
-            <a
-              href="/aboutus"
-              className="block px-4 py-2.5 text-[15px] font-medium text-gray-700 hover:text-blue-600 hover:bg-gray-50 rounded-md transition-colors duration-200"
-              onClick={() => setIsMenuOpen(false)}
-            >
-              About Us
-            </a>
-            <div className="px-4 py-2.5 space-y-2 flex items-baseline gap-1">
-            <Button variant="primary" className="w-full h-[48px]">
-                Start Fundraising
-              </Button>
-              <Button variant="outline" onClick={() => setShowAuthPopup(true)}>
-                Login
-              </Button>              
-            </div>
           </div>
         </div>
       </div>

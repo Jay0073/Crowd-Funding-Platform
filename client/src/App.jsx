@@ -17,8 +17,7 @@ function App() {
 
   return (
     <>
-      <Navbar />    
-      <Router>
+      <Navbar />   
         <ScrollToTop />
             <Routes>
               <Route path="/" element={<LandingPage />} />
@@ -29,7 +28,6 @@ function App() {
               <Route path='/fundraisingform' element={<FundraiserForm />} />
               <Route path='/*' element={<NotFound />} />
             </Routes>
-        </Router>
         <Footer />
     </>
   )

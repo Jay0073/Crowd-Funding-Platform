@@ -112,7 +112,6 @@ const TabPanel = ({ children, value, index }) => (
   </div>
 );
 
-
 const FundraiserPage = () => {
   const [activeTab, setActiveTab] = useState(0);
   const [showAllSupporters, setShowAllSupporters] = useState(false);
@@ -123,12 +122,22 @@ const FundraiserPage = () => {
 
   useEffect(() => {
     const fetchFundraiser = async () => {
-      try {
-        const response = await axios.get(`http://localhost:5000/fetchfundraise/${fundId}`);
-        setFundraiser(response.data);
-        console.log("response ", response.data)
-      } catch (error) {
-        console.error("Error fetching fundraiser:", error);
+      const token = localStorage.getItem("token");
+      if (token) {
+        try {
+          const response = await axios.get(
+            `http://localhost:5000/fetchfundraise/${fundId}`, {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+        });
+          setFundraiser(response.data);
+          console.log("response ", response.data);
+        } catch (error) {
+          console.error("Error fetching fundraiser:", error);
+        }
+      } else {
+        alert("Please login to fundraise")
       }
     };
     fetchFundraiser();
@@ -180,7 +189,6 @@ const FundraiserPage = () => {
     ],
   };
 
-
   const formattedDate = new Date(fundraiser.endDate).toLocaleDateString(
     "en-US",
     {
@@ -227,10 +235,10 @@ const FundraiserPage = () => {
   }, [showPaymentPopup]);
 
   useEffect(() => {
-      if (showPaymentPopup) {
-        window.scrollTo(0, 0);
-      }
-    }, [showPaymentPopup]);
+    if (showPaymentPopup) {
+      window.scrollTo(0, 0);
+    }
+  }, [showPaymentPopup]);
 
   return (
     <div className="min-h-screen bg-gray-50 py-24">
@@ -281,8 +289,13 @@ const FundraiserPage = () => {
                   Hi, I am {fundraiser.name}
                 </h2>
 
-                <h3 className="text-[15px] font-semibold text-gray-900 mb-4">You can contact us at {fundraiser.email} or {fundraiser.mobile}</h3>
-                <h3 className="text-xl font-semibold text-gray-900 mb-1">Description</h3>
+                <h3 className="text-[15px] font-semibold text-gray-900 mb-4">
+                  You can contact us at {fundraiser.email} or{" "}
+                  {fundraiser.mobile}
+                </h3>
+                <h3 className="text-xl font-semibold text-gray-900 mb-1">
+                  Description
+                </h3>
                 <p className="text-gray-600 leading-relaxed">
                   {fundraiser.description}
                 </p>
@@ -320,10 +333,16 @@ const FundraiserPage = () => {
               <div className="mb-6">
                 <div className="flex justify-between mb-2">
                   <span className="text-2xl font-bold text-gray-900">
-                    ${fundraiser.raisedAmount} <span className="text-[15px] ml-[-5] font-medium">raised</span>
+                    ${fundraiser.raisedAmount}{" "}
+                    <span className="text-[15px] ml-[-5] font-medium">
+                      raised
+                    </span>
                   </span>
                   <span className="text-gray-800">
-                    of <span className="text-2xl font-bold">${fundraiser.targetAmount}</span>
+                    of{" "}
+                    <span className="text-2xl font-bold">
+                      ${fundraiser.targetAmount}
+                    </span>
                   </span>
                 </div>
                 <ProgressBar
@@ -339,8 +358,10 @@ const FundraiserPage = () => {
               </div>
 
               {/* Contribute Button */}
-              <button className="w-full py-4 bg-blue-600 cursor-pointer text-white rounded-xl font-medium mb-4 hover:bg-blue-700 transition-colors"
-              onClick={() => setShowPaymentPopup(true)}>
+              <button
+                className="w-full py-4 bg-blue-600 cursor-pointer text-white rounded-xl font-medium mb-4 hover:bg-blue-700 transition-colors"
+                onClick={() => setShowPaymentPopup(true)}
+              >
                 Contribute Now
               </button>
 
@@ -426,7 +447,7 @@ const FundraiserPage = () => {
                           </p>
                         </div>
                         <span className="font-medium text-blue-600">
-                          ${supporter.amount} 
+                          ${supporter.amount}
                         </span>
                       </div>
                     ))}
@@ -441,11 +462,11 @@ const FundraiserPage = () => {
             </div>
           </div>
           {showPaymentPopup && (
-        <ContributionPopup
-          onClose={() => setShowPaymentPopup(false)}
-          fundraiserName="Help Save City Animal Shelter"
-        />
-      )}
+            <ContributionPopup
+              onClose={() => setShowPaymentPopup(false)}
+              fundraiserName="Help Save City Animal Shelter"
+            />
+          )}
         </div>
       </div>
     </div>

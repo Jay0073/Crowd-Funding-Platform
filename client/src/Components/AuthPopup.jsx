@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   X,
   Mail,
@@ -12,6 +12,7 @@ import {
 import { motion, AnimatePresence } from "framer-motion";
 import InputField from "./InputField"; // Import the InputField component
 import axios from "axios"; // Import axios for making HTTP requests
+import SuccessPopup from "./SuccessPopup";
 
 const AuthPopup = ({ onClose, returnTo }) => {
   const [isLogin, setIsLogin] = useState(true);
@@ -24,6 +25,8 @@ const AuthPopup = ({ onClose, returnTo }) => {
     password: "",
   });
   const [errors, setErrors] = useState({});
+  const [showSuccess, setShowSuccess] = useState(false);
+  
 
   const quotes = {
     login: {
@@ -96,17 +99,23 @@ const AuthPopup = ({ onClose, returnTo }) => {
   };
 
   const loginUser = async () => {
-    console.log("logging the user")
+    console.log("logging the user");
     try {
-      const response = await axios.post('http://localhost:5000/login', formData, {
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      });
+      const response = await axios.post(
+        "http://localhost:5000/login",
+        formData,
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
 
       if (response.status === 200) {
+        setShowSuccess(true);
         console.log("User logged in successfully:", response.data);
-        localStorage.setItem('token', response.data.token);
+        alert(response.data)
+        localStorage.setItem("token", response.data.token);
         window.location.href = returnTo || "/";
       } else {
         console.error("Error:", response.data);
@@ -117,18 +126,23 @@ const AuthPopup = ({ onClose, returnTo }) => {
   };
 
   const signupUser = async () => {
-    console.log("signing the user")
+    console.log("signing the user");
     console.log("Sending formData:", formData);
     try {
-      const response = await axios.post('http://localhost:5000/signup', formData, {
-        headers: {
-          // 'Content-Type': 'application/json',
-        },
-      });
+      const response = await axios.post(
+        "http://localhost:5000/signup",
+        formData,
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
 
       if (response.status === 201) {
+        setShowSuccess(true);
         console.log("User created successfully:", response.data);
-        localStorage.setItem('token', response.data.token);
+        localStorage.setItem("token", response.data.token);
         window.location.href = returnTo || "/";
       } else {
         console.error("Error:", response.data);
@@ -182,6 +196,7 @@ const AuthPopup = ({ onClose, returnTo }) => {
           >
             <X size={24} />
           </button>
+          
           <motion.div
             key={isLogin ? "login" : "signup"}
             initial={{ opacity: 0, y: 10 }}
@@ -197,6 +212,14 @@ const AuthPopup = ({ onClose, returnTo }) => {
             </p>
           </motion.div>
         </div>
+
+        {showSuccess && (
+          <SuccessPopup
+            message="Yay! You're In"
+            className="w-80"
+            onClose={() => setShowSuccess(false)}
+          />
+        )}
 
         {/* Tabs */}
         <div className="flex border-b">
@@ -349,7 +372,10 @@ const AuthPopup = ({ onClose, returnTo }) => {
                 className="w-full py-3 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700 transition-colors flex items-center justify-center gap-2 group"
               >
                 {isLogin ? "Login" : "Create Account"}
-                <ArrowRight size={20} className="group-hover:translate-x-1 transition-transform" />
+                <ArrowRight
+                  size={20}
+                  className="group-hover:translate-x-1 transition-transform"
+                />
               </button>
 
               {/* Social Login Options */}
