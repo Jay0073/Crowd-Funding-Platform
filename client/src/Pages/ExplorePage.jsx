@@ -1,12 +1,8 @@
 import React, { useState, useEffect } from "react";
 
-import {
-  Search,
-  SlidersHorizontal,
-  ArrowDownUp,
-} from "lucide-react";
+import { Search, SlidersHorizontal, ArrowDownUp } from "lucide-react";
 import FundraiserCard from "../Components/FundraiserCard";
-import axios from 'axios';
+import axios from "axios";
 
 const ExplorePage = () => {
   const [selectedCategory, setSelectedCategory] = useState("All");
@@ -19,7 +15,9 @@ const ExplorePage = () => {
     const fetchFundraisers = async () => {
       try {
         setIsLoading(true);
-        const response = await axios.get("http://localhost:5000/fetchfundraises");
+        const response = await axios.get(
+          "http://localhost:5000/fetchfundraises"
+        );
         setFundraisers(response.data);
       } catch (error) {
         setError(error.message);
@@ -52,22 +50,25 @@ const ExplorePage = () => {
   if (error) {
     return (
       <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-      <div className="bg-white p-6 rounded-lg shadow-lg text-red-600 flex items-center gap-2">
-        <AlertCircle />
-        {error}
-      </div>
+        <div className="bg-white p-6 rounded-lg shadow-lg text-red-600 flex items-center gap-2">
+          <AlertCircle />
+          {error}
+        </div>
       </div>
     );
   }
 
   return (
-    
     <div className="min-h-screen bg-gray-50 pt-24 pb-12">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Page Header */}
         <div className="text-center mb-12">
           <h1 className="text-5xl font-semibold text-gray-900 mb-4">
-            Explore <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-blue-800"> Fundraisers</span>
+            Explore{" "}
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-blue-800">
+              {" "}
+              Fundraisers
+            </span>
           </h1>
           <p className="text-gray-600">
             Discover and support causes that matter to you
@@ -180,13 +181,11 @@ const ExplorePage = () => {
           {/* Main Content - Fundraiser Cards (3/5) */}
           <div className="w-3/5">
             <div className="grid grid-cols-2 gap-6">
-              {fundraisers.map((fundraiser) => (
-                <FundraiserCard key={fundraiser.id} {...fundraiser} />
+              {fundraisers.map((fundraiser, index) => (
+                <FundraiserCard key={fundraiser.id || index} {...fundraiser} />
               ))}
             </div>
           </div>
-
-          
         </div>
       </div>
     </div>

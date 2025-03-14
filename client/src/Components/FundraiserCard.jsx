@@ -20,9 +20,6 @@ const FundraiserCard = ({
     day: "numeric",
   });
 
-  // const images = documents.map(item => images.append(item))
-  console.log(documents)
-
   const handleDonate = (fundId) => {
     console.log("donate is clicked and id is", fundId);
   };
