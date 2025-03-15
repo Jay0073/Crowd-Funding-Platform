@@ -8,11 +8,17 @@ export default defineConfig({
   plugins: [react(), tailwindcss()],
   build: {
     outDir: 'dist',  // This is the default, but you can specify it explicitly
-    assetsDir: 'assets'
+    assetsDir: 'assets',
+    rollupOptions: {
+      input: './index.html', // Ensure the correct entry file
+    },
   },
   resolve: {
     alias: {
       '@': path.resolve(__dirname, './src'),
     },
+  },
+  server: {
+    historyApiFallback: true, // Enables fallback for React Router
   },
 })
