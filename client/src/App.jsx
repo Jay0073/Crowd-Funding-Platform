@@ -21,7 +21,7 @@ function App() {
             <Routes>
               <Route path="/" element={<LandingPage />} />
               <Route path="/profile" element={<UserProfile />} />
-              <Route path="/aboutus" element={<AboutUs />} />
+              <Route exact path="/aboutus" element={<AboutUs />} />
               <Route path="/explore" element={<ExplorePage />} />
               <Route path="/donate/:id" element={<FundraiserPage />} />
               <Route path='/fundraisingform' element={<FundraiserForm />} />

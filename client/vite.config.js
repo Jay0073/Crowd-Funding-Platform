@@ -6,12 +6,15 @@ import path from 'path';
 // https://vite.dev/config/
 export default defineConfig({
   plugins: [react(), tailwindcss()],
+  root: '.',
+  publicDir: 'public',
   build: {
     outDir: 'dist',  // This is the default, but you can specify it explicitly
     assetsDir: 'assets',
     rollupOptions: {
       input: './index.html', // Ensure the correct entry file
     },
+    copyPublicDir: true
   },
   resolve: {
     alias: {
