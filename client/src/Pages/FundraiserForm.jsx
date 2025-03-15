@@ -185,7 +185,7 @@ const FundraiserForm = () => {
 
       // Upload images to backend
       const response = await axios.post(
-        "http://localhost:5000/upload",
+        "https://crowdfund-backend-lsb0.onrender.com/upload",
         formData,
         {
           headers: {
@@ -224,7 +224,7 @@ const FundraiserForm = () => {
 
       // 3. Submit fundraiser
       const response = await axios.post(
-        "http://localhost:5000/fundraise",
+        "https://crowdfund-backend-lsb0.onrender.com/fundraise",
         formDataToSend,
         {
           headers: {

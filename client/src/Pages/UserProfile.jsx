@@ -41,7 +41,7 @@ const UserProfile = () => {
       setIsLoading(true);
       const token = localStorage.getItem("token");
 
-      const response = await axios.get("http://localhost:5000/profileInfo", {
+      const response = await axios.get("https://crowdfund-backend-lsb0.onrender.com/profileInfo", {
         headers: { Authorization: `Bearer ${token}` },
       });
       setUserData(response.data);

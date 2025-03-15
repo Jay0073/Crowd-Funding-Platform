@@ -70,7 +70,7 @@ const ContributionPopup = ({
     if (token) {
       if (validateForm()) {
         try {
-          await axios.post("http://localhost:5000/donate",{
+          await axios.post("https://crowdfund-backend-lsb0.onrender.com/donate",{
               amount: customAmount,
               comment: formData.comment,
               fundId, fundraiserTitle

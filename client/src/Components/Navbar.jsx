@@ -119,7 +119,7 @@ const Navbar = () => {
 
     const fetchUser = async () => {
       try {
-        const response = await axios.get("http://localhost:5000/fetchuser", {
+        const response = await axios.get("https://crowdfund-backend-lsb0.onrender.com/fetchuser", {
           headers: {
             Authorization: `Bearer ${token}`,
           },

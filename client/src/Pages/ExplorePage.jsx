@@ -15,7 +15,7 @@ const ExplorePage = () => {
       try {
         setIsLoading(true);
         const response = await axios.get(
-          "http://localhost:5000/fetchfundraises"
+          "https://crowdfund-backend-lsb0.onrender.com/fetchfundraises"
         );
         setFundraisers(response.data);
       } catch (error) {

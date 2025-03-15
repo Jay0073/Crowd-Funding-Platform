@@ -128,7 +128,7 @@ const FundraiserPage = () => {
         try {
           setIsLoading(true);
           const response = await axios.get(
-            `http://localhost:5000/fetchfundraise/${fundId}`,
+            `https://crowdfund-backend-lsb0.onrender.com/fetchfundraise/${fundId}`,
             {
               headers: {
                 Authorization: `Bearer ${token}`,
@@ -206,7 +206,7 @@ const FundraiserPage = () => {
       try {
         setIsLoading(true);
         const response = await axios.get(
-          `http://localhost:5000/fetchRecentSupporters/${fundId}`
+          `https://crowdfund-backend-lsb0.onrender.com/fetchRecentSupporters/${fundId}`
         );
         setSupporters(response.data);
       } catch (error) {

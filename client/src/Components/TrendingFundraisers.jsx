@@ -17,7 +17,7 @@ const TrendingFundraisers = () => {
       try {
         setIsLoading(true);
         const response = await axios.get(
-          "http://localhost:5000/fetchtrendingfundraises"
+          "https://crowdfund-backend-lsb0.onrender.com/fetchtrendingfundraises"
         );
         setFundraisers(response.data);
       } catch (error) {

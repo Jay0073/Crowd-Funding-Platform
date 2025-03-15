@@ -157,7 +157,7 @@ app.use("/uploads", express.static("uploads"));
 
 app.post("/upload", upload.array("documents", 5), (req, res) => {
   try {
-    const fileUrls = req.files.map(file => `http://localhost:5000/uploads/${file.filename}`);
+    const fileUrls = req.files.map(file => `https://crowdfund-backend-lsb0.onrender.com/uploads/${file.filename}`);
     res.json({
       success: 1,
       fileUrls,

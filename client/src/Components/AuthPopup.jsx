@@ -103,7 +103,7 @@ const AuthPopup = ({ onClose, returnTo }) => {
     try {
       setIsLoading(true);
       const response = await axios.post(
-        "http://localhost:5000/login",
+        "https://crowdfund-backend-lsb0.onrender.com/login",
         formData,
         {
           headers: {
@@ -131,7 +131,7 @@ const AuthPopup = ({ onClose, returnTo }) => {
   const signupUser = async () => {
     try {
       const response = await axios.post(
-        "http://localhost:5000/signup",
+        "https://crowdfund-backend-lsb0.onrender.com/signup",
         formData,
         {
           headers: {
