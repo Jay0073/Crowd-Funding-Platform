@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import {BrowserRouter as Router, Route, Routes} from 'react-router-dom';
+import {Route, Routes} from 'react-router-dom';
 import './App.css'
 import LandingPage from '@/Pages/LandingPage.jsx';
 import AboutUs from '@/Pages/AboutUs.jsx';
@@ -21,7 +21,7 @@ function App() {
             <Routes>
               <Route path="/" element={<LandingPage />} />
               <Route path="/profile" element={<UserProfile />} />
-              <Route exact path="/aboutus" element={<AboutUs />} />
+              <Route path="/aboutus" element={<AboutUs />} />
               <Route path="/explore" element={<ExplorePage />} />
               <Route path="/donate/:id" element={<FundraiserPage />} />
               <Route path='/fundraisingform' element={<FundraiserForm />} />

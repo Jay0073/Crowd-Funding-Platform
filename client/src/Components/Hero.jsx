@@ -47,7 +47,7 @@ const Hero = () => {
 
               {/* CTA Buttons */}
               <div className="flex flex-wrap gap-4">
-                <a href='/fundraisingform'>
+                <a href='/#/fundraisingform'>
                 <button className="cursor-pointer px-8 py-4 rounded-full bg-blue-600 text-white font-semibold text-lg transition-all duration-200 transform hover:scale-105 hover:bg-blue-700 active:scale-100 flex items-center gap-2">
                   Start Fundraising
                   <ArrowRight size={20} />

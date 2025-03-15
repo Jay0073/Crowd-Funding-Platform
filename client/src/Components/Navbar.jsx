@@ -178,18 +178,18 @@ const Navbar = () => {
           </a>
 
           <div className="hidden md:flex items-center space-x-2">
-            <NavLink href="/explore">
+            <NavLink href="/#/explore">
               <span className="text-[20px] font-semibold">
                 Browse Fundraisers
               </span>
             </NavLink>
-            <NavLink href="/aboutus">
+            <NavLink href="/#/aboutus">
               <span className="text-[20px] font-semibold">About Us</span>
             </NavLink>
 
             <div className="pl-4 flex items-center space-x-3">
               <Button variant="primary" className="px-3 py-3">
-                <a href="/fundraisingform">Start Fundraising</a>
+                <a href="/#/fundraisingform">Start Fundraising</a>
               </Button>
 
               {isLoggedIn ? (
