@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { Share2, Heart } from "lucide-react";
 import { NavLink } from "react-router-dom";
-import ProgressBar from "./ProgressBar.jsx";
+import ProgressBar from "@/Components/ProgressBar.jsx";
 
 const FundraiserCard = ({
   fundId,

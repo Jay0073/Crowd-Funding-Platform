@@ -1,6 +1,6 @@
 import React from 'react';
 import { ArrowRight, Users, TrendingUp, Globe, } from 'lucide-react';
-import children from '../assets/children.webp';
+import children from '@/assets/children.webp';
 
 const StatCard = ({ icon: Icon, value, label }) => (
   <div className="flex items-center space-x-3 bg-white/80 backdrop-blur-sm px-4 py-3 rounded-2xl">

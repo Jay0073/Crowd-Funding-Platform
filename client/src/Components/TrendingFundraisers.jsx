@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import axios from "axios";
-import FundraiserCard from "./FundraiserCard.jsx";
+import FundraiserCard from "@/Components/FundraiserCard.jsx";
 
 const TrendingFundraisers = () => {
   const [activeIndex, setActiveIndex] = useState(0); // Set initial index to 0

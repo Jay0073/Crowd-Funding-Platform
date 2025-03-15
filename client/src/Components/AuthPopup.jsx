@@ -9,9 +9,9 @@ import {
   AlertCircle
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
-import InputField from "./InputField.jsx"; 
+import InputField from "@/Components/InputField.jsx"; 
 import axios from "axios"; 
-import SuccessPopup from "./SuccessPopup.jsx";
+import SuccessPopup from "@/Components/SuccessPopup.jsx";
 
 const AuthPopup = ({ onClose, returnTo }) => {
   const [isLogin, setIsLogin] = useState(true);

@@ -15,7 +15,7 @@ import {
   ChevronLeft,
   LucideUpload,
 } from "lucide-react";
-import InputField from "../Components/InputField.jsx";
+import InputField from "@/Components/InputField.jsx";
 import axios from "axios";
 
 const FundraiserForm = () => {

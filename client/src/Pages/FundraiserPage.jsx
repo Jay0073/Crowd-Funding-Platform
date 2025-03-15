@@ -13,7 +13,7 @@ import {
   UserCircleIcon,
 } from "lucide-react";
 import axios from "axios";
-import ContributionPopup from "../Components/ContributionPopup.jsx";
+import ContributionPopup from "@/Components/ContributionPopup.jsx";
 import { useParams } from "react-router-dom";
 
 const SocialShareButton = ({ icon: Icon, color, label, onClick }) => (

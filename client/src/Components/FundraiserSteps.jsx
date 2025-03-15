@@ -1,6 +1,6 @@
 import React from 'react';
 import { ClipboardEdit, Share2, Banknote, ArrowRight } from 'lucide-react';
-import video from '../assets/video.mp4'
+import video from '@/assets/video.mp4'
 
 const StepCard = ({ number, icon: Icon, title, description }) => (
   <div className="flex gap-6 group mb-10">

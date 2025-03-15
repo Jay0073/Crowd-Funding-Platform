@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { ChevronLeft, ChevronRight, Quote } from 'lucide-react';
-import img1 from '../assets/testimonyImg1.jpeg';
-import img2 from '../assets/testimonyImg2.jpeg';
-import img3 from '../assets/testimonyImg3.jpeg';
+import img1 from '@/assets/testimonyImg1.jpeg';
+import img2 from '@/assets/testimonyImg2.jpeg';
+import img3 from '@/assets/testimonyImg3.jpeg';
 
 
 const TestimonialCard = ({ data }) => (

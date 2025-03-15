@@ -9,7 +9,6 @@ import {
   DollarSign,
   Heart,
   HandHeart,
-  UserCircle,
   ExternalLink,
   AlertCircle,
   Check,
