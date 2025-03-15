@@ -1,6 +1,6 @@
 import React from 'react';
 import { Shield, Globe, CreditCard, Heart, Share2, Zap, Users, MessageCircle } from 'lucide-react';
-import FeatureCard from './FeatureCard';
+import FeatureCard from './FeatureCard.jsx';
 
 const Features = () => {
   const features = [

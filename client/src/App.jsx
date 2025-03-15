@@ -1,17 +1,16 @@
 import { useState } from 'react'
 import {BrowserRouter as Router, Route, Routes} from 'react-router-dom';
 import './App.css'
-import LandingPage from './Pages/LandingPage';
-import AboutUs from './Pages/AboutUs';
-import Navbar from './Components/NavBar';
-import Footer from './Components/Footer';
-import ExplorePage from './Pages/ExplorePage';
-import FundraiserPage from './Pages/FundraiserPage';
-import ScrollToTop from './Components/ScrollToTop';
-import FundraiserForm from './Pages/FundraiserForm';
-import { Rotate3D } from 'lucide-react';
-import NotFound from './Components/NotFound';
-import UserProfile from './Pages/UserProfile';
+import LandingPage from './Pages/LandingPage.jsx';
+import AboutUs from './Pages/AboutUs.jsx';
+import Navbar from './Components/NavBar.jsx';
+import Footer from './Components/Footer.jsx';
+import ExplorePage from './Pages/ExplorePage.jsx';
+import FundraiserPage from './Pages/FundraiserPage.jsx';
+import ScrollToTop from './Components/ScrollToTop.jsx';
+import FundraiserForm from './Pages/FundraiserForm.jsx';
+import NotFound from './Components/NotFound.jsx';
+import UserProfile from './Pages/UserProfile.jsx';
 
 function App() {
 

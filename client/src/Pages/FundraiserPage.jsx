@@ -1,23 +1,19 @@
 import React, { useState, useEffect } from "react";
 import {
-  Share2,
   Calendar,
   Users,
   ChevronLeft,
   ChevronRight,
   X,
-  Heart,
   Facebook,
   Twitter,
-  Instagram,
   Mail,
   Copy,
   AlertCircle,
   UserCircleIcon,
 } from "lucide-react";
 import axios from "axios";
-import ContributionPopup from "../Components/ContributionPopup";
-import donate2 from "../assets/donate2.jpeg";
+import ContributionPopup from "../Components/ContributionPopup.jsx";
 import { useParams } from "react-router-dom";
 
 const SocialShareButton = ({ icon: Icon, color, label, onClick }) => (

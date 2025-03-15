@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Menu, X, UserCircle2Icon, LogOut, Mail, Phone } from "lucide-react";
-import AuthPopup from "./AuthPopup";
+import AuthPopup from "./AuthPopup.jsx";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 

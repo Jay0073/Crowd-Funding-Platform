@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
-
 import { Search, SlidersHorizontal, ArrowDownUp } from "lucide-react";
-import FundraiserCard from "../Components/FundraiserCard";
+import FundraiserCard from "../Components/FundraiserCard.jsx";
 import axios from "axios";
 
 const ExplorePage = () => {

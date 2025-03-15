@@ -12,9 +12,8 @@ import donateimg from '../assets/donate.jpg';
 import teammember1 from '../assets/teammember1.jpeg'
 import teammember2 from '../assets/teammember2.jpeg'
 import teammember3 from '../assets/teammember3.jpeg'
-// Import your Features component
-import Features from '../Components/Features';
-import Testimonials from '../Components/Testimonials';
+import Features from '../Components/Features.jsx';
+import Testimonials from '../Components/Testimonials,jsx';
 
 const Stats = () => (
   <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
