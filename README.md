@@ -1,4 +1,4 @@
-# Crowd-Funding-Website
+# Crowd-Funding-Plotform
 
 This project is a platform that enables users to create and support crowdfunding campaigns. Users can initiate campaigns, set fundraising goals, and contribute to existing campaigns to support various causes.
 
