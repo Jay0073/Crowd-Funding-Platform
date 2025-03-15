@@ -272,8 +272,7 @@ app.post("/fundraise", authenticateToken, upload.array("documents", 5), async (r
     } = req.body;
 
     // Simulate getting the logged-in user (replace this with actual user logic)
-    const id = "USER-c77383fc-5f2c-49b3-a705-5e4f4e6210de";
-    const user = await User.findOne({ userId: id });
+    const user = await User.findById( req.user.userId ).select("-password");
     if (!user) return res.status(404).json({ error: "User not found" });
 
     // Create a new fundraiser

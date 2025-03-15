@@ -198,7 +198,7 @@ const Navbar = () => {
                     className="flex items-center space-x-2 hover:text-blue-600 transition-colors"
                     onClick={() => setShowProfilePopup((prev) => !prev)}
                   >
-                    <UserCircle2Icon size={35} className="text-gray-800 cursor-pointer" />
+                    <UserCircle2Icon size={35} className="text-gray-800 cursor-pointer hover:scale-110 transition-all duration-100" />
                   </button>
 
                   {showProfilePopup && (
