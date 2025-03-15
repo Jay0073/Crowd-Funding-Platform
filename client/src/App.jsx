@@ -3,7 +3,7 @@ import {BrowserRouter as Router, Route, Routes} from 'react-router-dom';
 import './App.css'
 import LandingPage from '@/Pages/LandingPage.jsx';
 import AboutUs from '@/Pages/AboutUs.jsx';
-import Navbar from '@/Components/NavBar.jsx';
+import Navbar from '@/Components/Navbar.jsx';
 import Footer from '@/Components/Footer.jsx';
 import ExplorePage from '@/Pages/ExplorePage.jsx';
 import FundraiserPage from '@/Pages/FundraiserPage.jsx';
