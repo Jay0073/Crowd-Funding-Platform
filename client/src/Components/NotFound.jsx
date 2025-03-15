@@ -5,6 +5,7 @@ import { motion } from "framer-motion";
 
 const NotFound = () => {
   const navigate = useNavigate();
+  window.scrollTo(0, 0)
 
   // Animation variants for different elements
   const containerVariants = {
