@@ -195,7 +195,7 @@ const FundraiserForm = () => {
       );
 
       if (response.status !== 200) throw new Error("Image upload failed");
-
+      console.log("Uploaded Image URLs:", response.data.fileUrls);
       return response.data.fileUrls; // Return list of image URLs
     } catch (error) {
       console.error("Image upload error:", error);
@@ -207,21 +207,14 @@ const FundraiserForm = () => {
     setIsSubmitting(true);
     setSubmitError(null);
     const token = localStorage.getItem("token");
-
+  
     try {
+      // 1. Upload images and get correct URLs
       const imageUrls = await uploadImages(formData.documents);
-
-      const formDataToSend = new FormData();
-      Object.entries(formData).forEach(([key, value]) => {
-        if (key === "documents") {
-          imageUrls.forEach((url) => formDataToSend.append("documents", url));
-        } else if (typeof value === "object") {
-          formDataToSend.append(key, JSON.stringify(value));
-        } else {
-          formDataToSend.append(key, value);
-        }
-      });
-
+  
+      // 2. Store only these URLs in MongoDB
+      const formDataToSend = { ...formData, documents: imageUrls };
+  
       // 3. Submit fundraiser
       const response = await axios.post(
         "https://crowdfund-backend-lsb0.onrender.com/fundraise",
@@ -229,11 +222,11 @@ const FundraiserForm = () => {
         {
           headers: {
             Authorization: `Bearer ${token}`,
-            "Content-Type": "multipart/form-data",
+            "Content-Type": "application/json",
           },
         }
       );
-
+  
       if (response.status === 201) {
         setShowSuccess(true);
         console.log("Fundraiser created successfully:", response.data);
@@ -248,7 +241,7 @@ const FundraiserForm = () => {
       setIsSubmitting(false);
     }
   };
-
+  
   const handlePrev = () => {
     setCurrentStep((prev) => Math.max(prev - 1, 0));
   };

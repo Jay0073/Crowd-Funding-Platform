@@ -88,7 +88,7 @@ const storage = multer.diskStorage({
     cb(null, uniqueSuffix + path.extname(file.originalname)); // Unique filename
   },
 });
-
+// 1742021209128-a22e00cf-1ada-4b10-947e-31a6d0efff62
 const upload = multer({ storage });
 
 // // Ensure 'uploads' directory exists
@@ -159,9 +159,8 @@ app.use("/uploads", express.static("uploads"));
 
 app.post("/upload", upload.array("documents", 5), (req, res) => {
   try {
-    // const fileUrls = req.files.map(file => `https://crowdfund-backend-lsb0.onrender.com/uploads/${file.filename}`);
-    const fileUrls = req.files.map(file => `${req.protocol}://${req.get('host')}/uploads/${file.filename}`);
-    res.json({
+    console.log("Uploaded filenames:", req.files.map(file => file.filename));
+    const fileUrls = req.files.map(file => `https://crowdfund-backend-lsb0.onrender.com/uploads/${file.filename}`);    res.json({
       success: 1,
       fileUrls,
     });
