@@ -53,7 +53,7 @@ const Hero = () => {
                   <ArrowRight size={20} />
                 </button>
                 </a>
-                <a href='/aboutus'>
+                <a href='/#/aboutus'>
                 <button className="cursor-pointer px-8 py-4 rounded-full border-2 border-gray-300 text-gray-700 font-semibold text-lg transition-all duration-200 hover:border-blue-600 hover:text-blue-600">
                   Learn More
                 </button>

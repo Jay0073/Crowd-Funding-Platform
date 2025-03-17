@@ -91,12 +91,12 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage });
 
-// Ensure 'uploads' directory exists
-const fs = require("fs");
-const uploadDir = path.join(__dirname, "..", "uploads");
-if (!fs.existsSync(uploadDir)) {
-  fs.mkdirSync(uploadDir);
-}
+// // Ensure 'uploads' directory exists
+// const fs = require("fs");
+// const uploadDir = path.join(__dirname, ".", "uploads");
+// if (!fs.existsSync(uploadDir)) {
+//   fs.mkdirSync(uploadDir);
+// }
 
 // Middleware to authenticate token
 const authenticateToken = (req, res, next) => {
@@ -159,7 +159,8 @@ app.use("/uploads", express.static("uploads"));
 
 app.post("/upload", upload.array("documents", 5), (req, res) => {
   try {
-    const fileUrls = req.files.map(file => `https://crowdfund-backend-lsb0.onrender.com/uploads/${file.filename}`);
+    // const fileUrls = req.files.map(file => `https://crowdfund-backend-lsb0.onrender.com/uploads/${file.filename}`);
+    const fileUrls = req.files.map(file => `${req.protocol}://${req.get('host')}/uploads/${file.filename}`);
     res.json({
       success: 1,
       fileUrls,
