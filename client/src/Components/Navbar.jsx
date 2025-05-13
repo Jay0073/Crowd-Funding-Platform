@@ -3,6 +3,7 @@ import { Menu, X, UserCircle2Icon, LogOut, Mail, Phone } from "lucide-react";
 import AuthPopup from "@/Components/AuthPopup.jsx";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { AlertCircle } from "lucide-react";
 
 const NavLink = ({ href, children }) => (
   <a

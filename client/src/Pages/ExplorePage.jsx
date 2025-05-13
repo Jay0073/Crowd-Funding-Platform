@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Search, SlidersHorizontal, ArrowDownUp } from "lucide-react";
 import FundraiserCard from "@/Components/FundraiserCard.jsx";
 import axios from "axios";
+import { AlertCircle } from "lucide-react";
 
 const ExplorePage = () => {
   const [selectedCategory, setSelectedCategory] = useState("All");

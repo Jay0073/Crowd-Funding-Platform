@@ -144,7 +144,7 @@ const FundraiserPage = () => {
           setIsLoading(false);
         }
       } else {
-        alert("Please login to fundraise");
+        alert("Please login to Donate");
       }
     };
     fetchFundraiser();
