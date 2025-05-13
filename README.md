@@ -1,4 +1,4 @@
-# 💸 Crowd-Funding Platform
+# Crowd-Funding Platform
 
 A full-stack web application that enables users to **create and support crowdfunding campaigns**. Whether you're launching a new startup idea, helping a social cause, or just experimenting with full-stack development, this platform has your back.
 
