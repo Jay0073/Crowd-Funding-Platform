@@ -6,11 +6,11 @@ import {
   Phone,
   User,
   ArrowRight,
-  AlertCircle
+  AlertCircle,
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
-import InputField from "@/Components/InputField.jsx"; 
-import axios from "axios"; 
+import InputField from "@/Components/InputField.jsx";
+import axios from "axios";
 import SuccessPopup from "@/Components/SuccessPopup.jsx";
 
 const AuthPopup = ({ onClose, returnTo }) => {
@@ -25,7 +25,7 @@ const AuthPopup = ({ onClose, returnTo }) => {
   });
   const [errors, setErrors] = useState({});
   const [showSuccess, setShowSuccess] = useState(false);
-  
+
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
 
@@ -121,7 +121,7 @@ const AuthPopup = ({ onClose, returnTo }) => {
         console.error("Error:", response.data);
       }
     } catch (error) {
-      setError(error.message)
+      setError(error.message);
       console.error("Error:", error);
     } finally {
       setIsLoading(false);
@@ -181,14 +181,13 @@ const AuthPopup = ({ onClose, returnTo }) => {
     },
   };
 
-
   if (error) {
     return (
       <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-      <div className="bg-white p-6 rounded-lg shadow-lg text-red-600 flex items-center gap-2">
-        <AlertCircle />
-        {error}
-      </div>
+        <div className="bg-white p-6 rounded-lg shadow-lg text-red-600 flex items-center gap-2">
+          <AlertCircle />
+          {error}
+        </div>
       </div>
     );
   }
@@ -210,7 +209,7 @@ const AuthPopup = ({ onClose, returnTo }) => {
           >
             <X size={24} />
           </button>
-          
+
           <motion.div
             key={isLogin ? "login" : "signup"}
             initial={{ opacity: 0, y: 10 }}
@@ -239,7 +238,7 @@ const AuthPopup = ({ onClose, returnTo }) => {
         <div className="flex border-b">
           <button
             onClick={() => setIsLogin(true)}
-            className={`flex-1 py-4 text-center font-medium transition-colors relative ${
+            className={`flex-1 py-4 text-center font-medium cursor-pointer transition-colors relative ${
               isLogin ? "text-blue-600" : "text-gray-500 hover:text-gray-700"
             }`}
           >
@@ -253,7 +252,7 @@ const AuthPopup = ({ onClose, returnTo }) => {
           </button>
           <button
             onClick={() => setIsLogin(false)}
-            className={`flex-1 py-4 text-center font-medium transition-colors relative ${
+            className={`flex-1 py-4 text-center cursor-pointer font-medium transition-colors relative ${
               !isLogin ? "text-blue-600" : "text-gray-500 hover:text-gray-700"
             }`}
           >
@@ -282,13 +281,12 @@ const AuthPopup = ({ onClose, returnTo }) => {
                 // Login Form
                 <>
                   <div className="mb-4">
-                    <button
-                      type="button"
-                      onClick={() => setUseMobile(!useMobile)}
-                      className="text-sm text-blue-600 hover:text-blue-700"
-                    >
-                      Use {useMobile ? "email" : "mobile number"} instead
-                    </button>
+                    <h3 className="font-medium text-gray-900 mb-2">
+                      Demo Account
+                    </h3>
+                    <p className="text-gray-600 text-sm mb-4">
+                      Try our platform features with these demo credentials
+                    </p>
                   </div>
                   {useMobile ? (
                     <InputField
@@ -307,7 +305,8 @@ const AuthPopup = ({ onClose, returnTo }) => {
                       label="Email"
                       name="email"
                       type="email"
-                      placeholder="Enter your email"
+                      placeholder="admin@example.com"
+                      defaultValue="admin@example.com"
                       value={formData.email}
                       onChange={handleInputChange}
                       error={errors.email}
@@ -318,17 +317,19 @@ const AuthPopup = ({ onClose, returnTo }) => {
                     label="Password"
                     name="password"
                     type={showPassword ? "text" : "password"}
-                    placeholder="Enter your password"
+                    placeholder="123456"
+                    defaultValue="123456"
                     value={formData.password}
                     onChange={handleInputChange}
                     error={errors.password}
                     togglePassword={togglePasswordVisibility}
                     showPassword={showPassword}
+                    t
                   />
                   <div className="text-right mb-4">
                     <button
                       type="button"
-                      className="text-sm text-blue-600 hover:text-blue-700"
+                      className="text-sm text-blue-600 cursor-pointer hover:text-blue-700"
                     >
                       Forgot Password?
                     </button>
@@ -383,7 +384,7 @@ const AuthPopup = ({ onClose, returnTo }) => {
 
               <button
                 type="submit"
-                className="w-full py-3 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700 transition-colors flex items-center justify-center gap-2 group"
+                className="w-full py-3 bg-blue-600 cursor-pointer text-white rounded-lg font-medium hover:bg-blue-700 transition-colors flex items-center justify-center gap-2 group"
               >
                 {isLogin ? "Login" : "Create Account"}
                 <ArrowRight
@@ -410,7 +411,7 @@ const AuthPopup = ({ onClose, returnTo }) => {
                     <button
                       key={provider}
                       type="button"
-                      className="flex items-center justify-center px-4 py-2 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors"
+                      className="flex items-center justify-center px-4 py-2 border border-blue-700 cursor-pointer rounded-lg hover:bg-gray-50 transition-colors"
                     >
                       {provider}
                     </button>
