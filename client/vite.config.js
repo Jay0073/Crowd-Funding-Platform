@@ -2,25 +2,10 @@ import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 import tailwindcss from '@tailwindcss/vite'
 import path from 'path';
-import fs from "fs";
-
-import { writeFileSync } from 'fs';
-writeFileSync('dist/.nojekyll', '');
-
-// Plugin to copy index.html to 404.html
-function copy404Plugin() {
-  return {
-    name: "copy-index-to-404",
-    closeBundle: () => {
-      fs.copyFileSync("dist/index.html", "dist/404.html");
-    },
-  };
-}
 
 // https://vite.dev/config/
 export default defineConfig({
-  base: '/CrowdFund/',
-  plugins: [react(), tailwindcss(), copy404Plugin()],
+  plugins: [react(), tailwindcss()],
   root: '.',
   publicDir: 'public',
   build: {
