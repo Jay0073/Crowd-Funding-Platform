@@ -4,6 +4,9 @@ import tailwindcss from '@tailwindcss/vite'
 import path from 'path';
 import fs from "fs";
 
+import { writeFileSync } from 'fs';
+writeFileSync('dist/.nojekyll', '');
+
 // Plugin to copy index.html to 404.html
 function copy404Plugin() {
   return {
